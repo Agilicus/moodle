@@ -74,6 +74,8 @@ class login implements renderable, templatable {
     public $logintoken;
     /** @var string Maintenance message, if Maintenance is enabled. */
     public $maintenance;
+    /** @var string use to disable username/password login */
+    public $canloginbyusernamepassword;
 
     /**
      * Constructor.
@@ -81,7 +83,7 @@ class login implements renderable, templatable {
      * @param array $authsequence The enabled sequence of authentication plugins.
      * @param string $username The username to display.
      */
-    public function __construct(array $authsequence, $username = '') {
+    public function __construct(array $authsequence, $company, $username = '') {
         global $CFG;
 
         $this->username = $username;
@@ -96,6 +98,8 @@ class login implements renderable, templatable {
             $this->cookieshelpicon = new help_icon('cookiesenabled', 'core');
             $this->rememberusername = true;
         }
+
+        $this->canloginbyusernamepassword = true;
 
         $this->autofocusform = !empty($CFG->loginpageautofocus);
 
@@ -115,8 +119,16 @@ class login implements renderable, templatable {
             $this->maintenance = $CFG->maintenance_message;
         }
 
+        # limit providers to the correct company
+        $idps = array();
+        foreach(\auth_plugin_base::get_identity_providers($authsequence) as $authname) {
+            if ($authname['name'] == $company) {
+                $idps = array_merge($idps, array($authname));
+            }
+        }
+
         // Identity providers.
-        $this->identityproviders = \auth_plugin_base::get_identity_providers($authsequence);
+        $this->identityproviders = $idps;
         $this->logintoken = \core\session\manager::get_login_token();
     }
 
@@ -152,6 +164,7 @@ class login implements renderable, templatable {
         $data->username = $this->username;
         $data->logintoken = $this->logintoken;
         $data->maintenance = format_text($this->maintenance, FORMAT_MOODLE);
+        $data->canloginbyusernamepassword = $this->canloginbyusernamepassword;
 
         return $data;
     }

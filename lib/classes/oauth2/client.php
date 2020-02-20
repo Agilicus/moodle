@@ -277,6 +277,13 @@ class client extends \oauth2_client {
         // Also add the scopes.
         $this->store_token($accesstoken);
 
+        # store the id token in memory
+        # need to choose either to put this in db
+        # or use sticky sessions during login
+        $idtoken = new stdClass;
+        $idtoken->token = $r->id_token;
+        $this->idtoken = idtoken;
+
         if (isset($r->refresh_token)) {
             $systemaccount->set('refreshtoken', $r->refresh_token);
             $systemaccount->update();
@@ -293,21 +300,26 @@ class client extends \oauth2_client {
      * @return array|false Moodle user fields for the logged in user (or false if request failed)
      */
     public function get_userinfo() {
-        $url = $this->get_issuer()->get_endpoint_url('userinfo');
-        $response = $this->get($url);
-        if (!$response) {
+        global $DB;
+        if (! $this->idtoken ) {
             return false;
         }
+
+        $token_parts = explode('.', $this->idtoken->token, 3);
+
+        $token_json = base64_decode($token_parts[1]);
         $userinfo = new stdClass();
         try {
-            $userinfo = json_decode($response);
+            $userinfo = json_decode($token_json, TRUE);
         } catch (\Exception $e) {
+            error_log( 'could not decode json' );
             return false;
         }
 
         $map = $this->get_userinfo_mapping();
 
         $user = new stdClass();
+        $user->errormsg = '';
         foreach ($map as $openidproperty => $moodleproperty) {
             // We support nested objects via a-b-c syntax.
             $getfunc = function($obj, $prop) use (&$getfunc) {
@@ -326,6 +338,54 @@ class client extends \oauth2_client {
             $resolved = $getfunc($userinfo, $openidproperty);
             if (!empty($resolved)) {
                 $user->$moodleproperty = $resolved;
+            }
+        }
+
+        $user->email = $userinfo['email'];
+        $user->username = $user->email;
+        $user->fullname = $userinfo['name'];
+
+        $user->firstname = $userinfo['https://api.agilicus.com/user']['first_name'];
+        $user->lastname = $userinfo['https://api.agilicus.com/user']['last_name'];
+
+        $agilicus_roles = array('admin', 'manager', 'instructor', 'user', 'ignore');
+        
+        
+        foreach ($agilicus_roles as $x) $agilicus_role_map[$x] = false;
+        $user->agilicus_role_map = $agilicus_role_map;
+
+
+        # we could lookup the org from the orgid, but this should work
+        # get the full organization from the hostname
+        $company = array();
+        preg_match('/(?<=moodle.)(.*)/', $_SERVER['HTTP_HOST'], $company);
+        $wantedcompanylong = $company[1];
+
+        # verify that we got this token from an expected issuer for this company
+        preg_match('/(?<=https:\/\/auth.)(.*)\//', $userinfo['iss'], $company);
+
+         # we don't know what company they came from so we should kick them out.
+        if ((!$wantedcompanylong) || (strpos($company[0], $wantedcompanylong))|| (!$DB->record_exists_sql('SELECT id FROM mdl_company WHERE name=?', array($wantedcompanylong)))) {
+            $user->errormsg = 'could not determine refering company';
+            return (array)$user;
+        }
+
+        $user->company = $wantedcompanylong;
+
+        if (!array_key_exists('roles', $userinfo['https://api.agilicus.com/user'])){
+            $user->errormsg = 'unauthorized' . $user->company ;
+            return (array)$user;
+        }
+        if (!array_key_exists('moodle', $userinfo['https://api.agilicus.com/user']['roles'])){
+            $user->errormsg = 'unauthorised, you do not have permission to access moodle, contact your administrator. ' . $user->company ;
+            return (array)$user;
+        }
+
+        $moodleroles = $userinfo['https://api.agilicus.com/user']['roles']['moodle'];
+
+        foreach($moodleroles as $role){
+            if ( in_array($role, $agilicus_roles)) {
+                $user->agilicus_role_map[$role] = TRUE;
             }
         }
 

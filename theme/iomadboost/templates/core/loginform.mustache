@@ -117,8 +117,8 @@
                     <div class="alert alert-danger" role="alert" data-aria-autofocus="true">{{error}}</div>
                 </div>
             {{/error}}
-
             <div class="row justify-content-md-center">
+                {{#canloginbyusernamepassword}}
                 <div class="col-md-5">
                     <form class="mt-3" action="{{loginurl}}" method="post" id="login">
                         <input id="anchor" type="hidden" name="anchor" value="">
@@ -156,6 +156,7 @@
                         <button type="submit" class="btn btn-primary btn-block mt-3" id="loginbtn">{{#str}}login{{/str}}</button>
                     </form>
                 </div>
+                {{/canloginbyusernamepassword}}
 
                 <div class="col-md-5">
                     <div class="forgetpass mt-3">

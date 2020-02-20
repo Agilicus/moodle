@@ -26,8 +26,20 @@
 
 require('../../config.php');
 require_once($CFG->dirroot . '/login/lib.php');
-$wantedcompanyid = required_param('id', PARAM_INT);
-$wantedcompanyshort = required_param('code', PARAM_CLEAN);
+#$wantedcompanyid = required_param('id', PARAM_INT);
+#$wantedcompanyshort = required_param('code', PARAM_CLEAN);
+
+$company = array();
+
+preg_match('/(?<=moodle.)(.*)/', $_SERVER['HTTP_HOST'], $company);
+
+if (!$company) {
+    error_log('invalid company url');
+}
+$wantedcompanylong = $company[0];
+
+$wantedcompanyid = $DB->get_field_sql('SELECT id FROM mdl_company WHERE name=?', array($wantedcompanylong));
+$wantedcompanyshort = $DB->get_field_sql('SELECT shortname FROM mdl_company WHERE id=?', array($wantedcompanyid));
 
 // Try to prevent searching for sites that allow sign-up.
 if (!isset($CFG->additionalhtmlhead)) {
@@ -66,7 +78,7 @@ if (!empty($wantsurl)) {
 }
 
 $context = context_system::instance();
-$PAGE->set_url("$CFG->httpswwwroot/login/index.php");
+$PAGE->set_url("$CFG->httpswwwroot/local/iomad_signup/login.php");
 $PAGE->set_context($context);
 $PAGE->set_pagelayout('login');
 
@@ -104,6 +116,7 @@ $frm  = false;
 $user = false;
 
 $authsequence = get_enabled_auth_plugins(true); // auths, in sequence
+
 foreach($authsequence as $authname) {
     $authplugin = get_auth_plugin($authname);
     $authplugin->loginpage_hook();
@@ -376,7 +389,7 @@ if (!empty($SESSION->loginerrormsg)) {
     if ($errormsg) {
         $SESSION->loginerrormsg = $errormsg;
     }
-    redirect(new moodle_url($CFG->httpswwwroot . '/login/index.php'));
+    redirect(new moodle_url($CFG->httpswwwroot . '/local/iomad_signup/login.php'));
 }
 
 $PAGE->set_title("$site->fullname: $loginsite");
@@ -392,8 +405,9 @@ if (isloggedin() and !isguestuser()) {
     echo $OUTPUT->confirm(get_string('alreadyloggedin', 'error', fullname($USER)), $logout, $continue);
     echo $OUTPUT->box_end();
 } else {
-    $loginform = new \core_auth\output\login($authsequence, $frm->username);
+    $loginform = new \core_auth\output\login($authsequence, $wantedcompanyshort, $frm->username);
     $loginform->set_error($errormsg);
+    $loginform->canloginbyusernamepassword = false;
     echo $OUTPUT->render($loginform);
 }
 

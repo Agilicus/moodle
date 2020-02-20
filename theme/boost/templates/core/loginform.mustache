@@ -38,9 +38,8 @@
     * cookieshelpiconformatted - Formatted html of cookies help icon,
     * errorformatted - Formatted error,
     * logourl - Flag, logo url,
-    * sitename - Name of site.,
-    * logintoken - Random token to protect login request.,
-    * maintenance - Maintenance message
+    * sitename - Name of site.
+    * logintoken - Random token to protect login request.
 
     Example context (json):
     {
@@ -90,8 +89,7 @@
         "errorformatted": "",
         "logourl": false,
         "sitename": "Beer & Chips",
-        "logintoken": "randomstring",
-        "maintenance": "For full access to this site, you need to login in as an admin."
+        "logintoken": "randomstring"
     }
 }}
 
@@ -159,7 +157,7 @@
                         <button type="submit" class="btn btn-primary btn-block mt-3" id="loginbtn">{{#str}}login{{/str}}</button>
                     </form>
                 </div>
-                {{/canloginbyusernamepassword}}
+                {{#canloginbyusernamepassword}}
 
                 <div class="col-md-5">
                     <div class="forgetpass mt-3">
@@ -244,6 +242,7 @@
         </div>
     </div>
 {{/maintenance}}
+
 {{#js}}
     {{#error}}
         require(['jquery'], function($) {

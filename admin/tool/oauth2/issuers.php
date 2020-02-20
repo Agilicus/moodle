@@ -56,22 +56,8 @@ if ($action == 'edit') {
         $PAGE->navbar->add(get_string('createnewissuer', 'tool_oauth2'));
     }
 
-    $showrequireconfirm = false;
-    if (!empty($issuerid)) {
-        // Show the "Require confirmation email" checkbox for trusted issuers like Google, Facebook and Microsoft.
-        $likefacebook = $DB->sql_like('url', ':facebook');
-        $likegoogle = $DB->sql_like('url', ':google');
-        $likemicrosoft = $DB->sql_like('url', ':microsoft');
-        $params = [
-            'issuerid' => $issuerid,
-            'facebook' => '%facebook%',
-            'google' => '%google%',
-            'microsoft' => '%microsoft%',
-        ];
-        $select = "issuerid = :issuerid AND ($likefacebook OR $likegoogle OR $likemicrosoft)";
-        // We're querying from the oauth2_endpoint table because the base URLs of FB and Microsoft can be empty in the issuer table.
-        $showrequireconfirm = $DB->record_exists_select('oauth2_endpoint', $select, $params);
-    }
+    # upstream disables the option to trust custom oauth issuers
+    $showrequireconfirm = true;
 
     $mform = new \tool_oauth2\form\issuer(null, ['persistent' => $issuer, 'showrequireconfirm' => $showrequireconfirm]);
 }

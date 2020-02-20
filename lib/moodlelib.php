@@ -2594,7 +2594,7 @@ function dayofweek($day, $month, $year) {
 function get_login_url() {
     global $CFG;
 
-    return "$CFG->wwwroot/login/index.php";
+    return "$CFG->wwwroot/local/iomad_signup/login.php";
 }
 
 /**

@@ -397,6 +397,8 @@ abstract class oauth2_client extends curl {
     protected $scope = '';
     /** @var stdClass $accesstoken access token object */
     protected $accesstoken = null;
+    /** @var string $id token string */
+    protected $idtoken = null;
     /** @var string $refreshtoken refresh token string */
     protected $refreshtoken = '';
     /** @var string $mocknextresponse string */
@@ -596,6 +598,13 @@ abstract class oauth2_client extends curl {
         // Also add the scopes.
         self::$upgradedcodes[] = $code;
         $this->store_token($accesstoken);
+
+        if (isset($r->id_token)) {
+            // Store the id token
+            $idtoken = new stdClass;
+            $idtoken->token = $r->id_token;
+            $this->idtoken = $idtoken;
+        }
 
         return true;
     }

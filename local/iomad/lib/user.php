@@ -24,6 +24,7 @@ require_once($CFG->dirroot.'/local/email/lib.php');
 require_once($CFG->dirroot.'/user/filters/lib.php');
 require_once($CFG->dirroot.'/lib/formslib.php');
 require_once($CFG->dirroot.'/group/lib.php');
+require_once($CFG->dirroot.'/enrol/locallib.php');
 
 class company_user {
 

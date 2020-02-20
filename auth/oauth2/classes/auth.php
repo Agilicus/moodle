@@ -384,6 +384,53 @@ class auth extends \auth_plugin_base {
         }
     }
 
+
+    /**
+     * sets a user with the appropriate company access levels
+     *
+     * @param int $userid
+     * @param string $companyname short name of the company to assign to
+     * @param array  $companymap array with roles as keys and values as boolean
+     */
+    public function set_access($userid, $companyname, $companymap) {
+        global $DB;
+
+        # for most roles this is automatically signed appropriatly
+        $educator = false;
+        if ($companymap['ignore']) {
+            error_log('ignore');
+            return;
+        }
+        if ($companymap['admin']) {
+            error_log('admin');
+            $usertype = 1;
+        }
+        else if ( $companymap['instructor'] ) {
+            # instructor is manager+educator
+            error_log('instructor');
+            $usertype = 2;
+            $educator = true;
+        }
+        else if ( $companymap['manager'] ) {
+            error_log('manager');
+            $usertype = 2;
+        }
+        else {
+            error_log('user');
+            $usertype = 0;
+        }
+
+        $companyid = $DB->get_field_sql('SELECT id FROM mdl_company WHERE name=?', array($companyname));
+        $companyshortname = $DB->get_field_sql('SELECT shortname FROM mdl_company WHERE name=?', array($companyname));
+
+        $company = new \company($companyid);
+        $department = \company::get_company_parentnode($companyid);
+
+        $company->assign_user_to_company($userid);
+
+        \company::upsert_company_user($userid, $companyid, $department->id, $usertype, $educator);
+    }
+
     /**
      * Print a page showing that a confirm email was sent with instructions.
      *
@@ -421,8 +468,21 @@ class auth extends \auth_plugin_base {
             $errormsg = get_string('loginerror_nouserinfo', 'auth_oauth2');
             $SESSION->loginerrormsg = $errormsg;
             $client->log_out();
-            redirect(new moodle_url('/login/index.php'));
+            redirect(new moodle_url('/local/iomad_signup/login.php'));
         }
+
+        # if the user doesn't have roles w/ the company
+        if( $userinfo['errormsg'] ) {
+            $errormsg = get_string('loginerror_nouserinfo', 'auth_oauth2');
+            $SESSION->loginerrormsg = $errormsg;
+            $client->log_out();
+            redirect(new moodle_url('/local/iomad_signup/login.php'));
+        }
+
+        # save this data for when it gets overwritten
+        $agilicusrolemap = $userinfo['agilicus_role_map'];
+        $companyname = $userinfo['company'];
+
         if (empty($userinfo['username']) || empty($userinfo['email'])) {
             // Trigger login failed event.
             $failurereason = AUTH_LOGIN_NOUSER;
@@ -433,7 +493,7 @@ class auth extends \auth_plugin_base {
             $errormsg = get_string('loginerror_userincomplete', 'auth_oauth2');
             $SESSION->loginerrormsg = $errormsg;
             $client->log_out();
-            redirect(new moodle_url('/login/index.php'));
+            redirect(new moodle_url('/local/iomad_signup/login.php'));
         }
 
         $userinfo['username'] = trim(core_text::strtolower($userinfo['username']));
@@ -473,10 +533,11 @@ class auth extends \auth_plugin_base {
                 $event->trigger();
                 $SESSION->loginerrormsg = get_string('invalidlogin');
                 $client->log_out();
-                redirect(new moodle_url('/login/index.php'));
+                redirect(new moodle_url('/local/iomad_signup/login.php'));
             } else if ($mappeduser && $mappeduser->confirmed) {
                 // Update user fields.
                 $userinfo = $this->update_user($userinfo, $mappeduser);
+                $userinfo = (array) $mappeduser;
                 $userwasmapped = true;
             } else {
                 // Trigger login failed event.
@@ -488,7 +549,7 @@ class auth extends \auth_plugin_base {
                 $errormsg = get_string('confirmationpending', 'auth_oauth2');
                 $SESSION->loginerrormsg = $errormsg;
                 $client->log_out();
-                redirect(new moodle_url('/login/index.php'));
+                redirect(new moodle_url('/local/iomad_signup/login.php'));
             }
         } else if (!empty($linkedlogin)) {
             // Trigger login failed event.
@@ -500,7 +561,7 @@ class auth extends \auth_plugin_base {
             $errormsg = get_string('confirmationpending', 'auth_oauth2');
             $SESSION->loginerrormsg = $errormsg;
             $client->log_out();
-            redirect(new moodle_url('/login/index.php'));
+            redirect(new moodle_url('/local/iomad_signup/login.php'));
         }
 
         $issuer = $client->get_issuer();
@@ -514,7 +575,7 @@ class auth extends \auth_plugin_base {
             $errormsg = get_string('notloggedindebug', 'auth_oauth2', get_string('loginerror_invaliddomain', 'auth_oauth2'));
             $SESSION->loginerrormsg = $errormsg;
             $client->log_out();
-            redirect(new moodle_url('/login/index.php'));
+            redirect(new moodle_url('/local/iomad_signup/login.php'));
         }
 
         if (!$userwasmapped) {
@@ -553,7 +614,7 @@ class auth extends \auth_plugin_base {
                     $errormsg = get_string('accountexists', 'auth_oauth2');
                     $SESSION->loginerrormsg = $errormsg;
                     $client->log_out();
-                    redirect(new moodle_url('/login/index.php'));
+                    redirect(new moodle_url('/local/iomad_signup/login.php'));
                 }
 
                 if (email_is_not_allowed($userinfo['email'])) {
@@ -567,7 +628,7 @@ class auth extends \auth_plugin_base {
                     $errormsg = get_string('notloggedindebug', 'auth_oauth2', $reason);
                     $SESSION->loginerrormsg = $errormsg;
                     $client->log_out();
-                    redirect(new moodle_url('/login/index.php'));
+                    redirect(new moodle_url('/local/iomad_signup/login.php'));
                 }
 
                 if (!empty($CFG->authpreventaccountcreation)) {
@@ -581,7 +642,7 @@ class auth extends \auth_plugin_base {
                     $errormsg = get_string('notloggedindebug', 'auth_oauth2', $reason);
                     $SESSION->loginerrormsg = $errormsg;
                     $client->log_out();
-                    redirect(new moodle_url('/login/index.php'));
+                    redirect(new moodle_url('/local/iomad_signup/login.php'));
                 }
 
                 if ($issuer->get('requireconfirmation')) {
@@ -599,6 +660,9 @@ class auth extends \auth_plugin_base {
                 } else {
                     // Create a new confirmed account.
                     $newuser = \auth_oauth2\api::create_new_confirmed_account($userinfo, $issuer);
+                    
+                    $this->set_access($newuser->id, $companyname, $agilicusrolemap);
+
                     $userinfo = get_complete_user_data('id', $newuser->id);
                     // No redirect, we will complete this login.
                 }

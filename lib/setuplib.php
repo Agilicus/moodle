@@ -898,18 +898,9 @@ function initialise_fullme() {
             }
         }
     } else {
-        if ($wwwroot['scheme'] !== 'https') {
-            throw new coding_exception('Must use https address in wwwroot when ssl proxy enabled!');
-        }
         $rurl['scheme'] = 'https'; // make moodle believe it runs on https, squid or something else it doing it
         $_SERVER['HTTPS'] = 'on'; // Override $_SERVER to help external libraries with their HTTPS detection.
         $_SERVER['SERVER_PORT'] = 443; // Assume default ssl port for the proxy.
-    }
-
-    // hopefully this will stop all those "clever" admins trying to set up moodle
-    // with two different addresses in intranet and Internet
-    if (!empty($CFG->reverseproxy) && $rurl['host'] === $wwwroot['host']) {
-        print_error('reverseproxyabused', 'error');
     }
 
     $hostandport = $rurl['scheme'] . '://' . $wwwroot['host'];
