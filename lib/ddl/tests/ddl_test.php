@@ -1787,6 +1787,11 @@ class core_ddl_testcase extends database_driver_testcase {
         $DB = $this->tdb; // Do not use global $DB!
         $dbman = $this->tdb->get_manager();
 
+        if ($DB->get_dbfamily() == 'cockroachdb') {
+            // https://github.com/cockroachdb/cockroach/issues/5807
+            $this->markTestSkipped('test skipped, cockroachdb does not support session exclusive temp tables');
+        }
+
         // Define 2 records.
         $record1 = (object)array(
             'course'     =>  1,
