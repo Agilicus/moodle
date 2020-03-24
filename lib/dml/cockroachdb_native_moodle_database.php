@@ -145,7 +145,23 @@ class cockroachdb_native_moodle_database extends pgsql_native_moodle_database {
     # see: https://github.com/cockroachdb/cockroach/issues/13546
     #      https://github.com/cockroachdb/cockroach/issues/6583
     public function session_lock_supported() {
-        return false;
+        return true;
+    }
+
+    /**
+     * Obtain session lock
+     * @param int $rowid id of the row with session record
+     * @param int $timeout max allowed time to wait for the lock in seconds
+     * @return bool success
+     */
+    public function get_session_lock($rowid, $timeout) {
+        return;
+
+    }
+
+    public function release_session_lock($rowid) {
+
+        return;
     }
 
     /**

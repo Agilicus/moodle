@@ -1,0 +1,32 @@
+version: "3.2"
+services:
+  # uncomment to launch a postgres instance
+  # db:
+  #   image: postgres:11
+  #   restart: unless-stopped
+  #   ports:
+  #     - "127.0.0.1:5432:5432"
+  #   #volumes:
+  #   #  - db_home:/var/lib/postgresql/data
+  #   environment:
+  #   - POSTGRES_USER=moodle
+  #   - POSTGRES_PASSWORD=moodle
+  cockroach:
+    image: cockroachdb/cockroach:v19.2.4
+    volumes:
+    - ./cockroach-data:/cockroach/cockroach-data
+    command:
+    - start-single-node
+    - --insecure
+  moodle:
+    build: .
+    restart: unless-stopped
+    ports:
+      - 80:5000
+    environment:
+    - DB_PORT_3306_TCP_ADDR=cockroach
+    - DB_PORT_3306_TCP_PORT=26257
+    - DB_ENV_PGSQL_DATABASE=defaultdb
+    - DB_ENV_PGSQL_USER=root
+    - DB_ENV_PGSQL_PASSWORD=hello
+    - DEBUG=true
