@@ -809,12 +809,22 @@ if (getenv('DEBUG')) {
     $CFG->phpunit_prefix = 't_';
 }
 
+// Security settings
 $CFG->additionalhtmlhead = "<style>\n.forgetpass {display: none;}\n</style>";
 $CFG->guestloginbutton = '0';
 $CFG->cookiessecure = '1';
 $CFG->cookiehttponly = '1';
 $CFG->allowframeembedding= '0';
 
+
+// SMTP configs
+$CFG->smtphosts = 'smtp.gmail.com:587';
+$CFG->smtpsecure = 'tls';
+$CFG->smtpauthtype = 'XOAUTH';
+// A password needs to be configured but is not used.
+$CFG->smtppass = 'notarealpassword';
+$CFG->smtpmaxbulk='100';
+$CFG->noreplyaddress='cloud-training@agilicus.com';
 
 //=========================================================================
 // ALL DONE!  To continue installation, visit your main page with a browser
