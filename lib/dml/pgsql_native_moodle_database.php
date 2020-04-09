@@ -171,6 +171,22 @@ class pgsql_native_moodle_database extends moodle_database {
             $connection .= " options='" . implode(' ', $options) . "'";
         }
 
+        // If SSL is enabled, add to connection string.
+        if (!empty($dboptions['ssl'])) {
+            if (isset($dboptions['sslmode'])) {
+                $connection .= " sslmode=" . $dboptions['sslmode'];
+            } else { // Default to verify-ca.
+                $connection .= " sslmode=verify-ca";
+            }
+            if (isset($dboptions['sslkey'])) {
+                $connection .= " sslkey=" . addcslashes($dboptions['sslkey'], "'\\");
+                $connection .= " sslcert=" . addcslashes($dboptions['sslcert'], "'\\");
+            }
+            if (isset($dboptions['sslca'])) {
+                $connection .= " sslrootcert=" . addcslashes($dboptions['sslca'], "'\\");
+            }
+        }
+
         ob_start();
         if (empty($this->dboptions['dbpersist'])) {
             $this->pgsql = pg_connect($connection, PGSQL_CONNECT_FORCE_NEW);

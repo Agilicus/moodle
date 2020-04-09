@@ -70,14 +70,15 @@ $CFG->dboptions = array(
                                 // can be removed for MySQL (by default it will
                                 // use 'utf8mb4_unicode_ci'. This option should
                                 // be removed for all other databases.
-    
     # must be set to zero, moodle uses cursors to paginate 
     # db querries which cockroachdb does not support
     'fetchbuffersize' => 0,
 );
 
-$CFG->dboptions = ['dbcollation' => False];
-
+if (getenv('DB_SSL')) {
+    $CFG->dboptions['ssl'] = true;
+    $CFG->dboptions['sslmode'] = 'require';
+}
 
 //=========================================================================
 // 1.5 object store settings

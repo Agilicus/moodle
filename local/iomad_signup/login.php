@@ -31,7 +31,7 @@ require_once($CFG->dirroot . '/login/lib.php');
 
 $company = array();
 
-preg_match('/(?<=moodle.)(.*)/', $_SERVER['HTTP_HOST'], $company);
+preg_match('/(?<=lms.)(.*)/', $_SERVER['HTTP_HOST'], $company);
 
 if (!$company) {
     error_log('invalid company url');

@@ -301,10 +301,13 @@ class client extends \oauth2_client {
      */
     public function get_userinfo() {
         global $DB;
+        error_log('in get_userinfo');
+
         if (! $this->idtoken ) {
             return false;
         }
 
+        error_log('haz token');
         $token_parts = explode('.', $this->idtoken->token, 3);
 
         $token_json = base64_decode($token_parts[1]);
@@ -345,6 +348,7 @@ class client extends \oauth2_client {
         $user->username = $user->email;
         $user->fullname = $userinfo['name'];
 
+        
         $user->firstname = $userinfo['https://api.agilicus.com/user']['first_name'];
         $user->lastname = $userinfo['https://api.agilicus.com/user']['last_name'];
 
@@ -358,14 +362,17 @@ class client extends \oauth2_client {
         # we could lookup the org from the orgid, but this should work
         # get the full organization from the hostname
         $company = array();
-        preg_match('/(?<=moodle.)(.*)/', $_SERVER['HTTP_HOST'], $company);
+        preg_match('/(?<=lms.)(.*)/', $_SERVER['HTTP_HOST'], $company);
         $wantedcompanylong = $company[1];
 
         # verify that we got this token from an expected issuer for this company
         preg_match('/(?<=https:\/\/auth.)(.*)\//', $userinfo['iss'], $company);
 
+
+
          # we don't know what company they came from so we should kick them out.
         if ((!$wantedcompanylong) || (strpos($company[0], $wantedcompanylong))|| (!$DB->record_exists_sql('SELECT id FROM mdl_company WHERE name=?', array($wantedcompanylong)))) {
+            error_log('issuer-company mismatch');
             $user->errormsg = 'could not determine refering company';
             return (array)$user;
         }
@@ -376,12 +383,12 @@ class client extends \oauth2_client {
             $user->errormsg = 'unauthorized' . $user->company ;
             return (array)$user;
         }
-        if (!array_key_exists('moodle', $userinfo['https://api.agilicus.com/user']['roles'])){
+        if (!array_key_exists('lms', $userinfo['https://api.agilicus.com/user']['roles'])){
             $user->errormsg = 'unauthorised, you do not have permission to access moodle, contact your administrator. ' . $user->company ;
             return (array)$user;
         }
 
-        $moodleroles = $userinfo['https://api.agilicus.com/user']['roles']['moodle'];
+        $moodleroles = $userinfo['https://api.agilicus.com/user']['roles']['lms'];
 
         foreach($moodleroles as $role){
             if ( in_array($role, $agilicus_roles)) {
