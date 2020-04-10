@@ -821,7 +821,7 @@ $CFG->allowframeembedding= '0';
 // SMTP configs
 $CFG->smtphosts = 'smtp.gmail.com:587';
 $CFG->smtpsecure = 'tls';
-$CFG->smtpauthtype = 'XOAUTH';
+$CFG->smtpauthtype = 'XOAUTH2';
 // A password needs to be configured but is not used.
 $CFG->smtppass = 'notarealpassword';
 $CFG->smtpmaxbulk='100';
