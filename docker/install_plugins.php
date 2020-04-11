@@ -1,6 +1,6 @@
 <?php
 
-$moodle_dir="/var/www/moodle";
+$moodle_dir = getenv('MOODLE_INSTALL_DIR') ?? "/var/www/moodle";
 
 $plugins=array(
     "moodle-local_aws"=> array("https://github.com/catalyst/moodle-local_aws.git", "9766894f6a03b6c2c6a7194f028abd6fdcc1f8c6", "/local/aws/"),
