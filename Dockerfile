@@ -21,7 +21,7 @@ RUN apt-get update \
 
 RUN apt-get update && \
     apt-get -y install git libpq-dev \
-    zlib1g-dev libzip-dev libpng-dev \
+    zlib1g-dev libzip-dev libpng-dev ghostscript aspell aspell-en aspell-fr aspell-es \
     libcurl4-gnutls-dev libxml2-dev php-fpm
 
 # create a user so we know the id in k8s

@@ -619,7 +619,7 @@ if ( getenv('SSL_PROXY') == "true" ) {
 // $CFG->showcronsql = true;
 //
 // Force developer level debug and add debug info to the output of cron
-// $CFG->showcrondebugging = true;
+$CFG->showcrondebugging = false;
 //
 //=========================================================================
 // 8. FORCED SETTINGS
@@ -771,7 +771,7 @@ if ( getenv('SSL_PROXY') == "true" ) {
 // On Windows it will be something like 'c:\gs\bin\gswin32c.exe' (make sure
 // there are no spaces in the path - if necessary copy the files 'gswin32c.exe'
 // and 'gsdll32.dll' to a new folder without a space in the path)
-//      $CFG->pathtogs = '/usr/bin/gs';
+$CFG->pathtogs = '/usr/bin/gs';
 //
 // Clam AV path.
 // Probably something like /usr/bin/clamscan or /usr/bin/clamdscan. You need
@@ -781,14 +781,14 @@ if ( getenv('SSL_PROXY') == "true" ) {
 // Path to du.
 // Probably something like /usr/bin/du. If you enter this, pages that display
 // directory contents will run much faster for directories with a lot of files.
-//      $CFG->pathtodu = '';
+$CFG->pathtodu = '/usr/bin/du';
 //
 // Path to aspell.
 // To use spell-checking within the editor, you MUST have aspell 0.50 or later
 // installed on your server, and you must specify the correct path to access the
 // aspell binary. On Unix/Linux systems, this path is usually /usr/bin/aspell,
 // but it might be something else.
-//      $CFG->aspellpath = '';
+$CFG->aspellpath = '/usr/bin/aspell';
 //
 // Path to dot.
 // Probably something like /usr/bin/dot. To be able to generate graphics from
@@ -811,7 +811,7 @@ if (getenv('DEBUG')) {
 }
 
 // Security settings
-$CFG->additionalhtmlhead = "<style>\n.forgetpass {display: none;}\n</style>";
+$CFG->additionalhtmlhead = "<style>\n.forgetpass {display: none;}\nfooter#page-footer {display: none;}\n</style>";
 $CFG->guestloginbutton = '0';
 $CFG->cookiessecure = '1';
 $CFG->cookiehttponly = '1';
