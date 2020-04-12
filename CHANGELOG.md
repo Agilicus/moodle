@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://git.agilicus.com/applications/iomad/compare/v1.0.1...v1.1.0) (2020-04-12)
+
+
+### Features
+
+* add missing gs/du/h5p/aspell ([de31112](https://git.agilicus.com/applications/iomad/commit/de31112bd0cfcde85ad5fbba129e1f2683052849))
+
 ### 1.0.1 (2020-04-06)
 
 ### [0.0.2](https://git.agilicus.com/applications/iomad/compare/v0.0.1...v0.0.2) (2020-04-03)
