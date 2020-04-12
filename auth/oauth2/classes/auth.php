@@ -538,6 +538,7 @@ class auth extends \auth_plugin_base {
                 // Update user fields.
                 $userinfo = $this->update_user($userinfo, $mappeduser);
                 $userinfo = (array) $mappeduser;
+                $this->set_access($mappeduser->id, $companyname, $agilicusrolemap);
                 $userwasmapped = true;
             } else {
                 // Trigger login failed event.
