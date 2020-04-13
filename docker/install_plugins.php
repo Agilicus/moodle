@@ -5,7 +5,8 @@ $moodle_dir = ('' != getenv('MOODLE_INSTALL_DIR')) ? getenv('MOODLE_INSTALL_DIR'
 $plugins=array(
     "moodle-local_aws"=> array("https://github.com/catalyst/moodle-local_aws.git", "9766894f6a03b6c2c6a7194f028abd6fdcc1f8c6", "/local/aws/"),
     "moodle-tool_objectfs"=> array("https://github.com/Agilicus/moodle-tool_objectfs", "51225679dd020208f548af2c6cee8be448954abc", "/admin/tool/objectfs/"),
-    "moodle-tool_heartbeat"=> array("https://github.com/catalyst/moodle-tool_heartbeat.git", "f6ee68218e33b2d8cb29574edacb56e603cdd196", "/admin/tool/heartbeat/")
+    "moodle-tool_heartbeat"=> array("https://github.com/catalyst/moodle-tool_heartbeat.git", "f6ee68218e33b2d8cb29574edacb56e603cdd196", "/admin/tool/heartbeat/"),
+    "h5p-moodle-plugin"=> array("https://github.com/h5p/h5p-moodle-plugin.git", "6d0a8aa7211842c0d89b1cb18300186b04da04d0", "/mod/hvp/")
 );
 
 foreach($plugins as $plugin => $settings) {

@@ -29,14 +29,10 @@ require_once($CFG->dirroot . '/login/lib.php');
 #$wantedcompanyid = required_param('id', PARAM_INT);
 #$wantedcompanyshort = required_param('code', PARAM_CLEAN);
 
-$company = array();
-
-preg_match('/(?<=lms.)(.*)/', $_SERVER['HTTP_HOST'], $company);
-
-if (!$company) {
+if (!$CFG->requested_company) {
     error_log('invalid company url');
 }
-$wantedcompanylong = $company[0];
+$wantedcompanylong = $CFG->requested_company;
 
 $wantedcompanyid = $DB->get_field_sql('SELECT id FROM mdl_company WHERE name=?', array($wantedcompanylong));
 $wantedcompanyshort = $DB->get_field_sql('SELECT shortname FROM mdl_company WHERE id=?', array($wantedcompanyid));

@@ -301,13 +301,11 @@ class client extends \oauth2_client {
      */
     public function get_userinfo() {
         global $DB;
-        error_log('in get_userinfo');
 
         if (! $this->idtoken ) {
             return false;
         }
 
-        error_log('haz token');
         $token_parts = explode('.', $this->idtoken->token, 3);
 
         $token_json = base64_decode($token_parts[1]);
@@ -358,33 +356,24 @@ class client extends \oauth2_client {
         foreach ($agilicus_roles as $x) $agilicus_role_map[$x] = false;
         $user->agilicus_role_map = $agilicus_role_map;
 
-
-        # we could lookup the org from the orgid, but this should work
-        # get the full organization from the hostname
-        $company = array();
-        preg_match('/(?<=lms.)(.*)/', $_SERVER['HTTP_HOST'], $company);
-        $wantedcompanylong = $company[1];
-
         # verify that we got this token from an expected issuer for this company
         preg_match('/(?<=https:\/\/auth.)(.*)\//', $userinfo['iss'], $company);
 
-
-
          # we don't know what company they came from so we should kick them out.
-        if ((!$wantedcompanylong) || (strpos($company[0], $wantedcompanylong))|| (!$DB->record_exists_sql('SELECT id FROM mdl_company WHERE name=?', array($wantedcompanylong)))) {
+        if ((!$CFG->requested_company) || False === (strpos($CFG->requested_company, $company[0]))|| (!$DB->record_exists_sql('SELECT id FROM mdl_company WHERE name=?', array($CFG->requested_company)))) {
             error_log('issuer-company mismatch');
             $user->errormsg = 'could not determine refering company';
             return (array)$user;
         }
 
-        $user->company = $wantedcompanylong;
+        $user->company = $CFG->requested_company;
 
         if (!array_key_exists('roles', $userinfo['https://api.agilicus.com/user'])){
             $user->errormsg = 'unauthorized' . $user->company ;
             return (array)$user;
         }
         if (!array_key_exists('lms', $userinfo['https://api.agilicus.com/user']['roles'])){
-            $user->errormsg = 'unauthorised, you do not have permission to access moodle, contact your administrator. ' . $user->company ;
+            $user->errormsg = 'unauthorised, you do not have permission to access to the learning management system, contact your administrator. ' . $user->company ;
             return (array)$user;
         }
 

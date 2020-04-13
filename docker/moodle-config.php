@@ -827,6 +827,13 @@ $CFG->smtppass = 'notarealpassword';
 $CFG->smtpmaxbulk='100';
 $CFG->noreplyaddress='cloud-training@agilicus.com';
 
+preg_match('/(?<=lms.)(.*)/', $_SERVER['HTTP_HOST'], $company);
+if ($company) {
+    $CFG->requested_company = $company[1];
+} else {
+    $CFG->requested_company = False;
+}
+
 //=========================================================================
 // ALL DONE!  To continue installation, visit your main page with a browser
 //=========================================================================
