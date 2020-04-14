@@ -34,9 +34,7 @@ test:
     - name: docker:dind
   script: |
     docker-compose up --build -d
-
-    docker exec iomad_moodle_1 ls mod/hvp/library
-
+    
     # for whatever reason moodle's php-unit needs a wierd locale to run
     docker-compose exec -T --user root moodle apt-get install -y locales
     docker-compose exec -T --user root moodle locale-gen en_AU.UTF-8
