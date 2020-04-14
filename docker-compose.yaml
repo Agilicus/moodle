@@ -14,7 +14,7 @@ services:
   cockroach:
     image: cockroachdb/cockroach:v19.2.4
     volumes:
-    - ../cockroach-data:/cockroach/cockroach-data
+    - ./cockroach-data:/cockroach/cockroach-data
     command:
     - start-single-node
     - --insecure
@@ -30,5 +30,3 @@ services:
     - DB_ENV_PGSQL_USER=root
     - DB_ENV_PGSQL_PASSWORD=hello
     - DEBUG=true
-    volumes:
-    - ./:/var/www/moodle
