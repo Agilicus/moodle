@@ -18,6 +18,10 @@ foreach($plugins as $plugin => $settings) {
 
     echo $git_clone_cmd . "\n";
     echo shell_exec($git_clone_cmd);
+
+    $git_submodule_cmd = 'cd ' . $plugindir . ' && git submodule update';
+    echo $git_submodule_cmd . "\n";
+    echo shell_exec($git_submodule_cmd);
    
     $mkdir_cmd = 'mkdir -p '. $installdir;
     echo $mkdir_cmd . "\n";

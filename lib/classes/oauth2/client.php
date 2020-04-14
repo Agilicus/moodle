@@ -300,7 +300,7 @@ class client extends \oauth2_client {
      * @return array|false Moodle user fields for the logged in user (or false if request failed)
      */
     public function get_userinfo() {
-        global $DB;
+        global $DB, $CFG;
 
         if (! $this->idtoken ) {
             return false;
@@ -360,7 +360,7 @@ class client extends \oauth2_client {
         preg_match('/(?<=https:\/\/auth.)(.*)\//', $userinfo['iss'], $company);
 
          # we don't know what company they came from so we should kick them out.
-        if ((!$CFG->requested_company) || False === (strpos($CFG->requested_company, $company[0]))|| (!$DB->record_exists_sql('SELECT id FROM mdl_company WHERE name=?', array($CFG->requested_company)))) {
+        if ((!$CFG->requested_company) || False === (strpos($CFG->requested_company, $company[1]))|| (!$DB->record_exists_sql('SELECT id FROM mdl_company WHERE name=?', array($CFG->requested_company)))) {
             error_log('issuer-company mismatch');
             $user->errormsg = 'could not determine refering company';
             return (array)$user;
