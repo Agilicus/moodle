@@ -18,10 +18,6 @@ foreach($plugins as $plugin => $settings) {
 
     echo $git_clone_cmd . "\n";
     echo shell_exec($git_clone_cmd);
-
-    $git_submodule_cmd = 'cd ' . $plugindir . ' && git submodule update';
-    echo $git_submodule_cmd . "\n";
-    echo shell_exec($git_submodule_cmd);
    
     $mkdir_cmd = 'mkdir -p '. $installdir;
     echo $mkdir_cmd . "\n";
@@ -30,6 +26,10 @@ foreach($plugins as $plugin => $settings) {
     $git_chckout_cmd = 'cd '. $plugindir.' && git checkout ' . $settings[1];
     echo $git_chckout_cmd . "\n";
     echo shell_exec($git_chckout_cmd);
+
+    $git_submodule_cmd = 'cd ' . $plugindir . ' && git submodule update --init';
+    echo $git_submodule_cmd . "\n";
+    echo shell_exec($git_submodule_cmd);
 
     $cp_command = 'cp -r '. $plugindir . "/* " . $installdir;
     echo $cp_command . "\n";
