@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.1](https://git.agilicus.com/applications/iomad/compare/v1.1.0...v1.1.1) (2020-04-14)
+
+
+### Bug Fixes
+
+* always update user's role, plugin installer works now ([535fd22](https://git.agilicus.com/applications/iomad/commit/535fd2276ddea1a99e18b8dd1ee94237c8b34f67))
+
 ## [1.1.0](https://git.agilicus.com/applications/iomad/compare/v1.0.1...v1.1.0) (2020-04-12)
 
 
