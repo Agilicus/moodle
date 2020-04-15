@@ -270,8 +270,8 @@ $CFG->xsendfile = 'X-Accel-Redirect';     // Nginx {@see http://wiki.nginx.org/X
 //
 // Following settings may be used to select session driver, uncomment only one of the handlers.
 //   Database session handler (not compatible with MyISAM):
-$CFG->session_handler_class = '\core\session\database';
-$CFG->session_database_acquire_lock_timeout = 120;
+//      $CFG->session_handler_class = '\core\session\database';
+//      $CFG->session_database_acquire_lock_timeout = 120;
 //
 //   File session handler (file system locking required):
 //      $CFG->session_handler_class = '\core\session\file';
@@ -291,7 +291,26 @@ $CFG->session_database_acquire_lock_timeout = 120;
 //      ** NOTE: Memcache extension has less features than memcached and may be
 //         less reliable. Use memcached where possible or if you encounter
 //         session problems. **
-//
+
+if  (getenv('REDIS_HOST')) {
+    $CFG->session_handler_class = '\core\session\redis';
+    $CFG->session_redis_host = getenv('REDIS_HOST');
+    $CFG->session_redis_port = getenv('REDIS_PORT');
+    if (getenv('REDIS_DB')){
+        $CFG->session_redis_database = getenv('REDIS_DB');
+    }
+    if (getenv('REDIS_TOKEN')) {
+        // Optional, default is don't set one.
+        $CFG->session_redis_auth = getenv('REDIS_TOKEN');
+    }
+    //$CFG->session_redis_prefix = ''; // Optional, default is don't set one.
+    //$CFG->session_redis_acquire_lock_timeout = 120;
+    //$CFG->session_redis_lock_expire = 7200;
+} else {
+   $CFG->session_handler_class = '\core\session\database';
+   $CFG->session_database_acquire_lock_timeout = 120;
+}
+
 // Please be aware that when selecting either Memcached or Memcache for sessions that it is advised to use a dedicated
 // memcache server. The memcache and memcached extensions do not provide isolated environments for individual uses.
 // Using the same server for other purposes (MUC for example) can lead to sessions being prematurely removed should

@@ -33,9 +33,12 @@ test:
   services:
     - name: docker:dind
   script: |
+    docker login -u $CI_REGISTRY_USER -p $CI_BUILD_TOKEN $CI_REGISTRY
     docker-compose up --build -d
     
     # for whatever reason moodle's php-unit needs a wierd locale to run
+
+    docker-compose exec -T --user root moodle apt-get update 
     docker-compose exec -T --user root moodle apt-get install -y locales
     docker-compose exec -T --user root moodle locale-gen en_AU.UTF-8
 

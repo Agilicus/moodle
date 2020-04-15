@@ -18,8 +18,12 @@ services:
     command:
     - start-single-node
     - --insecure
+  redis:
+    image: cr.agilicus.com/open-source/titan:integration
+    ports:
+      - 7369:7369
   moodle:
-    build: ..
+    build: .
     restart: unless-stopped
     ports:
       - 80:5000
@@ -29,6 +33,8 @@ services:
     - DB_ENV_PGSQL_DATABASE=defaultdb
     - DB_ENV_PGSQL_USER=root
     - DB_ENV_PGSQL_PASSWORD=hello
+    - REDIS_HOST=redis
+    - REDIS_PORT=7369
     - DEBUG=true
     volumes:
     - ./:/var/www/moodle

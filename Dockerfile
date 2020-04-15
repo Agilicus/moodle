@@ -13,7 +13,8 @@ RUN apt-get update \
  && apt-get -y install curl gnupg2 dumb-init libfcgi0ldbl \
  && curl -L https://nginx.org/keys/nginx_signing.key | apt-key add - \
  && echo "deb http://nginx.org/packages/mainline/debian/ stretch nginx" >> /etc/apt/sources.list \
- && apt-get install -y nginx
+ && apt-get install -y nginx \
+ && rm -rf /var/lib/apt/lists/*
 
 #RUN apt-get update && apt-get -y install unzip php \
 #    php-gd postfix wget supervisor php-pgsql curl libcurl4 \
@@ -22,7 +23,7 @@ RUN apt-get update \
 RUN apt-get update && \
     apt-get -y install git libpq-dev \
     zlib1g-dev libzip-dev libpng-dev ghostscript aspell aspell-en aspell-fr aspell-es \
-    libcurl4-gnutls-dev libxml2-dev php-fpm
+    libcurl4-gnutls-dev libxml2-dev php-fpm && rm -rf /var/lib/apt/lists/*
 
 # create a user so we know the id in k8s
 RUN useradd -ms /bin/bash moodle
@@ -41,8 +42,17 @@ RUN echo "clear_env = no" >> /etc/php/7.2/fpm/pool.d/www.conf && \
 
 
 RUN apt-get update && \
-    apt-get -y install php-pgsql php-xml php-curl php-gd php-intl \
-                       php-mbstring php-xmlrpc php-soap php-zip
+    apt-get -y install php-curl \
+                       php-gd \
+                       php-intl \
+                       php-mbstring \
+                       php-pgsql \
+                       php-redis \
+                       php-soap \
+                       php-xml \
+                       php-xmlrpc \
+                       php-zip \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN ln -sf /dev/stderr /var/log/nginx/error.log
 
