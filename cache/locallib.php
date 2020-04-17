@@ -502,7 +502,10 @@ class cache_config_writer extends cache_config {
         $factory = cache_factory::instance();
         $factory->updating_started();
         $config = $factory->create_config_instance(true);
-        $config->write_definitions_to_cache(self::locate_definitions($coreonly));
+
+        # this prevents admins from viewing the cache if the filesystem isn't writeable
+        # which is the case here
+        # $config->write_definitions_to_cache(self::locate_definitions($coreonly));
         $factory->updating_finished();
     }
 
@@ -575,7 +578,7 @@ class cache_config_writer extends cache_config {
                 unset($this->configdefinitionmappings[$key]);
             }
         }
-        #$this->config_save();
+        $this->config_save();
     }
 
     /**
