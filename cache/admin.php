@@ -307,6 +307,10 @@ $renderer = $PAGE->get_renderer('core_cache');
 echo $renderer->header();
 echo $renderer->heading($title);
 echo $renderer->notifications($notifications);
+echo "Information purposes only!<br />";
+echo "Edit these settings from the appropriate admin portal.<br />";
+echo "The file is /var/moodledata/muc/config.php, ";
+echo "you can use applications/iomad to bring up a container and edit the settings and save them from there if neccessary<br />";
 
 if ($mform instanceof moodleform) {
     $mform->display();
