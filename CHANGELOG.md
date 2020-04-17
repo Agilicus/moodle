@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.5](https://git.agilicus.com/applications/iomad/compare/v1.1.4...v1.1.5) (2020-04-17)
+
+
+### Bug Fixes
+
+* make cache admin page viewable ([9b1dd1d](https://git.agilicus.com/applications/iomad/commit/9b1dd1da84ac82aff1d47a93dc51892f2639bbe1))
+* will error on page edits now ([23472e1](https://git.agilicus.com/applications/iomad/commit/23472e1c426796df4dd478ae609dcac8e19a66e4))
+
 ### [1.1.4](https://git.agilicus.com/applications/iomad/compare/v1.1.3...v1.1.4) (2020-04-17)
 
 
