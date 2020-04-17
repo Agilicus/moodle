@@ -575,7 +575,7 @@ class cache_config_writer extends cache_config {
                 unset($this->configdefinitionmappings[$key]);
             }
         }
-        $this->config_save();
+        #$this->config_save();
     }
 
     /**
