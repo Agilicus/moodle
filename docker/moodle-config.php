@@ -568,7 +568,7 @@ if ( getenv('SSL_PROXY') == "true" ) {
 //      Uses lock files stored by default in the dataroot. Whether this
 //      works on clusters depends on the file system used for the dataroot.
 //
-// "\\core\\lock\\db_row_lock_factory" - DB locking based on table rows.
+$CfG->lock_factory = "\\core\\lock\\db_record_lock_factory" ; # - DB locking based on table rows.
 //
 // "\\core\\lock\\postgres_lock_factory" - DB locking based on postgres advisory locks.
 //
