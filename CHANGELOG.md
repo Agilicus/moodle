@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.4](https://git.agilicus.com/applications/iomad/compare/v1.1.3...v1.1.4) (2020-04-17)
+
+
+### Bug Fixes
+
+* use DB locking instead of file locking, fix certificate sql querry ([d4f03d8](https://git.agilicus.com/applications/iomad/commit/d4f03d884cfbd1c19dbdf2457f163240256f6b08))
+
 ### [1.1.3](https://git.agilicus.com/applications/iomad/compare/v1.1.2...v1.1.3) (2020-04-16)
 
 
