@@ -1,1 +1,5 @@
 **/.git
+*.md
+*.txt
+Dockerfile
+.gitlab-ci.yml

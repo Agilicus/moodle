@@ -146,3 +146,30 @@ docker-compose up
 with newer php versions:
 ./buildconf
 ./configure   --prefix=/usr/local/php   --enable-mbstring   --with-curl   --with-openssl   --with-xmlrpc   --enable-soap   --with-zip   --with-gd   --with-jpeg-dir   --with-png-dir   --with-mysqli   --with-pgsql   --enable-embedded-mysqli   --with-freetype-dir    --enable-intl   --with-xsl   --with-zlib --enable-fpm
+
+
+### Running on desktop
+
+You may run this on your desktop natively. First, run the two support services. You may obtain
+cockroachdb from [here](https://binaries.cockroachdb.com/cockroach-v19.2.6.linux-amd64.tgz)
+
+```
+docker run --rm -it -p 7369:7369 cr.agilicus.com/open-source/titan:integration
+cockroach start-single-node --insecure
+```
+
+Next, you may choose to run under docker or natively. If native, set the environment variables as in the docker-run line
+```
+docker build -t iomad .
+docker run -p 5000:5000 -e DB_PORT_3306_TCP_ADDR=$(hostname) -e DB_PORT_3306_TCP_PORT=26257 -e REDIS_HOST=$(hostname) -e REDIS_POR=7369 -e DEBUG=true -e DB_ENV_PGSQL_DATABASE=defaultdb -e DB_ENV_PGSQL_USER=root -e DB_ENV_PGSQL_PASSWORD=hello --entrypoint=bash --rm -it iomad
+```
+
+You may also run under docker-compose.
+Evaluate `docker-compose-local.yaml` as a docker-compose file for local
+dev.
+
+You could also run as follows to avoid needing to rebuild each time:
+```
+docker build -t iomad .
+docker run -v $PWD:/var/www/moodle -p 5000:5000 -e DB_PORT_3306_TCP_ADDR=$(hostname) -e DB_PORT_3306_TCP_PORT=26257 -e REDIS_HOST=$(hostname) -e REDIS_POR=7369 -e DEBUG=true -e DB_ENV_PGSQL_DATABASE=defaultdb -e DB_ENV_PGSQL_USER=root -e DB_ENV_PGSQL_PASSWORD=hello --entrypoint=bash --rm -it iomad
+```

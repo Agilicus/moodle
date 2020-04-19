@@ -1,12 +1,5 @@
 ---
 
-variables:
-  DOCKER_DRIVER: overlay2
-  PORT: 2375
-  DOCKER_HOST: tcp://localhost:2375
-  CONTAINER_IMAGE: $CI_REGISTRY/$CI_PROJECT_PATH
-  COMPOSE_INTERACTIVE_NO_CLI: 'true'
-
 stages:
   - lint
   - test
@@ -29,34 +22,54 @@ lint:
 # Run any tests against the code that we want prior to doing a release
 test:
   stage: test
-  image: cr.agilicus.com/corp-tools/docker-compose
+  image: cr.agilicus.com/applications/php
   services:
-    - name: docker:dind
+    - name: cockroachdb/cockroach:v19.2.6
+      alias: cockroachdb
+      command: ['start-single-node', '--insecure', '--store=type=mem,size=640MiB', '--max-offset=5ms', '--log-file-verbosity=WARNING', '--logtostderr=ERROR']
+    - name: cr.agilicus.com/open-source/titan:integration
+  variables:
+    DB_PORT_3306_TCP_ADDR: "127.0.0.1"
+    DB_PORT_3306_TCP_PORT: "26257"
+    DB_ENV_PGSQL_DATABASE: defaultdb
+    DB_ENV_PGSQL_USER: root
+    DB_ENV_PGSQL_PASSWORD: hello
+    REDIS_HOST: "127.0.0.1"
+    REDIS_PORT: "7369"
+    DEBUG: "true"
   script: |
-    docker login -u $CI_REGISTRY_USER -p $CI_BUILD_TOKEN $CI_REGISTRY
-    docker-compose up --build -d
-    
-    # for whatever reason moodle's php-unit needs a wierd locale to run
+    ln -sf $PWD /var/www/moodle
 
-    docker-compose exec -T --user root moodle apt-get update 
-    docker-compose exec -T --user root moodle apt-get install -y locales
-    docker-compose exec -T --user root moodle locale-gen en_AU.UTF-8
+    mkdir -p /var/www/phpunitdata /var/moodledata
+    cp docker/moodle-config.php config.php
+    php docker/install_plugins.php
 
-    docker-compose exec -T --user root moodle php /var/www/moodle/admin/tool/phpunit/cli/init.php
+    doit() {
+      echo "------------------------------------------"
+      echo "Execute $*"
+      time "$@"
+      echo ""
+      echo "------------------------------------------"
+    }
+
+    doit php admin/tool/phpunit/cli/init.php --parallel=4
 
     # limited selection of core tests
-    #docker-compose exec -T moodle vendor/bin/phpunit "core_course_category_testcase" course/tests/category_test.php <-- errors
-    docker-compose exec -T moodle vendor/bin/phpunit lib/ddl/tests/ddl_test.php
-    docker-compose exec -T moodle vendor/bin/phpunit "core_dml_testcase" lib/dml/tests/dml_test.php
-    docker-compose exec -T moodle vendor/bin/phpunit lib/tests/lock_test.php
-    docker-compose exec -T moodle vendor/bin/phpunit user/tests/editlib_test.php
+    doit vendor/bin/phpunit lib/ddl/tests/ddl_test.php
+    doit vendor/bin/phpunit "core_dml_testcase" lib/dml/tests/dml_test.php
+    doit vendor/bin/phpunit lib/tests/lock_test.php
+    doit vendor/bin/phpunit user/tests/editlib_test.php
 
     # limited selection of the non-broken iomad tests
-    docker-compose exec -T moodle vendor/bin/phpunit local/iomad/tests/filter_iomad_filter_test.php
-    docker-compose exec -T moodle vendor/bin/phpunit local/iomad/tests/filter_manager_test.php
-    #docker-compose exec -T moodle vendor/bin/phpunit local/iomad/tests/mod_forum_lib_test.php <-- errors
-    docker-compose exec -T moodle vendor/bin/phpunit local/iomad/tests/navigationlib_test.php
-    docker-compose exec -T moodle vendor/bin/phpunit local/iomad/tests/weblib_format_text_test.php
+    doit vendor/bin/phpunit local/iomad/tests/filter_iomad_filter_test.php
+    doit vendor/bin/phpunit local/iomad/tests/filter_manager_test.php
+    doit vendor/bin/phpunit local/iomad/tests/navigationlib_test.php
+    vendor/bin/phpunit local/iomad/tests/weblib_format_text_test.php
+  except:
+    refs:
+      - tags
+    variables:
+      - $CI_COMMIT_MESSAGE =~ /^chore\(release\)/
 
 #
 # Run `conventional-changelog -p angular -i CHANGELOG.md -s -r 0`
