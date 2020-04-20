@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.8](https://git.agilicus.com/applications/iomad/compare/v1.1.7...v1.1.8) (2020-04-20)
+
+
+### Bug Fixes
+
+* oauth2 idp's lister is now company aware rather than the login page filtering idps directly ([5a74e96](https://git.agilicus.com/applications/iomad/commit/5a74e96a6a6cff2cbd82090ba1f0306e9fa770a5))
+
 ### [1.1.7](https://git.agilicus.com/applications/iomad/compare/v1.1.6...v1.1.7) (2020-04-20)
 
 ### [1.1.6](https://git.agilicus.com/applications/iomad/compare/v1.1.5...v1.1.6) (2020-04-19)
