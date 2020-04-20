@@ -184,13 +184,15 @@ class auth extends \auth_plugin_base {
      * @return array List of arrays with keys url, iconurl and name.
      */
     public function loginpage_idp_list($wantsurl) {
+        global $CFG, $DB;
         $providers = \core\oauth2\api::get_all_issuers();
         $result = [];
         if (empty($wantsurl)) {
             $wantsurl = '/';
         }
+        $company = $DB->get_record('company', array('name' => $CFG->requested_company));
         foreach ($providers as $idp) {
-            if ($this->is_ready_for_login_page($idp)) {
+            if (($this->is_ready_for_login_page($idp)) && ($idp->get('name')==$company->shortname)) {
                 $params = ['id' => $idp->get('id'), 'wantsurl' => $wantsurl, 'sesskey' => sesskey()];
                 $url = new moodle_url('/auth/oauth2/login.php', $params);
                 $icon = $idp->get('image');
