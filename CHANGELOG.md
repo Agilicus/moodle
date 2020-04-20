@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.9](https://git.agilicus.com/applications/iomad/compare/v1.1.8...v1.1.9) (2020-04-20)
+
+
+### Bug Fixes
+
+* bump php base to get pm.start_servers fix ([509169e](https://git.agilicus.com/applications/iomad/commit/509169effa6ce3905585e097a0e8101f2c41c318))
+
 ### [1.1.8](https://git.agilicus.com/applications/iomad/compare/v1.1.7...v1.1.8) (2020-04-20)
 
 
