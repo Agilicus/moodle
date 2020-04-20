@@ -830,7 +830,7 @@ if (getenv('DEBUG')) {
 }
 
 // Security settings
-$CFG->additionalhtmlhead = "<style>\n.forgetpass {display: none;}\nfooter#page-footer {display: none;}\n</style>";
+$CFG->additionalhtmlhead = "<style>\n.forgetpass {display: none;}\nfooter#page-footer {display: none;}\n div.mt-3:nth-child(2) {display: none;}\n</style>";
 $CFG->guestloginbutton = '0';
 $CFG->cookiessecure = '1';
 $CFG->cookiehttponly = '1';
