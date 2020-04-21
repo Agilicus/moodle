@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.10](https://git.agilicus.com/applications/iomad/compare/v1.1.9...v1.1.10) (2020-04-21)
+
+
+### Bug Fixes
+
+* bump php upstream to v0.0.4 to enable prometheus exporter ([5af8e3d](https://git.agilicus.com/applications/iomad/commit/5af8e3dc0dbbaf5b75d131c7c25425b42b3d7c48))
+
 ### [1.1.9](https://git.agilicus.com/applications/iomad/compare/v1.1.8...v1.1.9) (2020-04-20)
 
 
