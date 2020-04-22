@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://git.agilicus.com/applications/iomad/compare/v1.1.10...v1.2.0) (2020-04-22)
+
+
+### Features
+
+* add /health.php endpoint for dedicated health check ([47be972](https://git.agilicus.com/applications/iomad/commit/47be972e4924087a854a88695c3a666c0b1d116e))
+
 ### [1.1.10](https://git.agilicus.com/applications/iomad/compare/v1.1.9...v1.1.10) (2020-04-21)
 
 
