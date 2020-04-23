@@ -15,6 +15,9 @@ services:
     image: cockroachdb/cockroach:v19.2.4
     volumes:
     - ../cockroach-data:/cockroach/cockroach-data
+    ports:
+      - 26257:26257
+      - 8080:8080
     command:
     - start-single-node
     - --insecure

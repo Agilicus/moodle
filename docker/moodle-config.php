@@ -305,7 +305,11 @@ if  (getenv('REDIS_HOST')) {
     }
     //$CFG->session_redis_prefix = ''; // Optional, default is don't set one.
     //$CFG->session_redis_acquire_lock_timeout = 120;
-    //$CFG->session_redis_lock_expire = 7200;
+
+    # the longest operation we expect clients to do is 
+    # upload the largest size of file we support: 100MB
+    # assuminga reasonable 1Mb/s upload that's roughly 800s
+    $CFG->session_redis_lock_expire = 800;
 } else {
    $CFG->session_handler_class = '\core\session\database';
    $CFG->session_database_acquire_lock_timeout = 120;
