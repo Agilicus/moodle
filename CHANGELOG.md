@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.1](https://git.agilicus.com/applications/iomad/compare/v1.2.0...v1.2.1) (2020-04-23)
+
+
+### Bug Fixes
+
+* longer selector on css to block sign in cookie warning ([d4d6743](https://git.agilicus.com/applications/iomad/commit/d4d67435471731bcab49f670688979e74e68dceb))
+
 ## [1.2.0](https://git.agilicus.com/applications/iomad/compare/v1.1.10...v1.2.0) (2020-04-22)
 
 
