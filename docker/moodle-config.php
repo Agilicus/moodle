@@ -834,7 +834,7 @@ if (getenv('DEBUG')) {
 }
 
 // Security settings
-$CFG->additionalhtmlhead = "<style>\n.forgetpass {display: none;}\nfooter#page-footer {display: none;}\n#page-local-iomad_signup-login.format-site.path-local.path-local-iomad_signup.gecko.dir-ltr div.mt-3 {display: none;}";
+$CFG->additionalhtmlhead = "<style>\n.forgetpass {display: none;}\nfooter#page-footer {display: none;}\n</style>";
 $CFG->guestloginbutton = '0';
 $CFG->cookiessecure = '1';
 $CFG->cookiehttponly = '1';
