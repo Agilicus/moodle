@@ -354,7 +354,7 @@ class redis extends handler {
          * the session then we just wait until it finishes before we can open the session.
          */
         while (!$haslock) {
-            $haslock = $this->connection->setnx($lockkey, '1');
+            $haslock = $this->connection->set($lockkey, '1', ['nx', 'px'=>$this->lockexpire*1000]);
             if (!$haslock) {
                 usleep(rand(100000, 1000000));
                 if ($this->time() > $startlocktime + $this->acquiretimeout) {
@@ -367,7 +367,6 @@ class redis extends handler {
                 }
             } else {
                 $this->locks[$id] = $this->time() + $this->lockexpire;
-                $this->connection->expire($lockkey, $this->lockexpire);
                 return true;
             }
         }
