@@ -314,6 +314,7 @@ if  (getenv('REDIS_HOST')) {
    $CFG->session_handler_class = '\core\session\database';
    $CFG->session_database_acquire_lock_timeout = 120;
 }
+$CFG->enable_read_only_sessions = '1';
 
 // Please be aware that when selecting either Memcached or Memcache for sessions that it is advised to use a dedicated
 // memcache server. The memcache and memcached extensions do not provide isolated environments for individual uses.
