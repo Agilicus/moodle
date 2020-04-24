@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.3](https://git.agilicus.com/applications/iomad/compare/v1.2.2...v1.2.3) (2020-04-24)
+
+
+### Bug Fixes
+
+* enable sendfile, cached h5p libs ([2a89ca4](https://git.agilicus.com/applications/iomad/commit/2a89ca464f57bfd3b5fcf82fbad2436fccd5d5e5))
+
 ### [1.2.2](https://git.agilicus.com/applications/iomad/compare/v1.2.1...v1.2.2) (2020-04-24)
 
 
