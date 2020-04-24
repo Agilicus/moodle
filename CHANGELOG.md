@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.2](https://git.agilicus.com/applications/iomad/compare/v1.2.1...v1.2.2) (2020-04-24)
+
+
+### Bug Fixes
+
+* change to using single set with explicit expiry ([1a9b519](https://git.agilicus.com/applications/iomad/commit/1a9b51964b23cfdf5dfdcd6e28953d4501b1e39e))
+* use smaller session lock timeouts ([0e57ef7](https://git.agilicus.com/applications/iomad/commit/0e57ef7f9edebf2c64fa97cef4b36e5f70942a43))
+
 ### [1.2.1](https://git.agilicus.com/applications/iomad/compare/v1.2.0...v1.2.1) (2020-04-23)
 
 
