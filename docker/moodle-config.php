@@ -254,6 +254,12 @@ $CFG->admin = 'admin';
 $CFG->xsendfile = 'X-Accel-Redirect';     // Nginx {@see http://wiki.nginx.org/XSendfile}
 // If your X-Sendfile implementation (usually Nginx) uses directory aliases specify them
 // in the following array setting:
+$CFG->xsendfilealiases = array(
+     '/dataroot/' => $CFG->dataroot,
+     '/localcachedir/' => $CFG->dataroot . '/localcache',
+     '/filedir/' => $CFG->dataroot . '/filedir',
+     '/temp/' => $CFG->dataroot . '/temp'
+);
 //     $CFG->xsendfilealiases = array(
 //         '/dataroot/' => $CFG->dataroot,
 //         '/cachedir/' => '/var/www/moodle/cache',    // for custom $CFG->cachedir locations

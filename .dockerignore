@@ -3,3 +3,4 @@
 *.txt
 Dockerfile
 .gitlab-ci.yml
+cockroach-data
