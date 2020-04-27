@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.4](https://git.agilicus.com/applications/iomad/compare/v1.2.3...v1.2.4) (2020-04-27)
+
+
+### Bug Fixes
+
+* bump base container to get remote_addr logging, request_id correct ([9f722c0](https://git.agilicus.com/applications/iomad/commit/9f722c03ee1a5507f55bdac7a4990d286ef2be15))
+
 ### [1.2.3](https://git.agilicus.com/applications/iomad/compare/v1.2.2...v1.2.3) (2020-04-24)
 
 
