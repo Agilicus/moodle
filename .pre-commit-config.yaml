@@ -1,0 +1,14 @@
+---
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks.git
+    rev: v2.5.0
+    hooks:
+      - id: no-commit-to-branch
+        args: [ '--branch', 'integration', '--branch', 'integration' ]
+
+  - repo: https://github.com/talos-systems/conform
+    rev: v0.1.0-alpha.19
+    hooks:
+      - id: conform
+        stages:
+          - commit-msg

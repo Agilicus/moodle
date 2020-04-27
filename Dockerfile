@@ -1,4 +1,4 @@
-FROM cr.agilicus.com/applications/php:v0.0.6
+FROM cr.agilicus.com/applications/php:v0.0.7
 LABEL maintainer="Agilicus Devs <dev@agilicus.com>"
 
 WORKDIR /var/www/moodle
