@@ -559,8 +559,8 @@ class company {
                                     company_user::enrol($user, array($course->id), $this->id,
                                                         $companycoursenoneditorrole->id);
                                 } else {
-                                    if ($companymanager->managertype == 2) {
-                                        // Assign the department manager course access role.
+                                    if ($companymanager->educator != '1') {
+                                        // Assign non-educators the course access role.
                                         company_user::enrol($user, array($course->id), $this->id,
                                                             $companycoursenoneditorrole->id);
                                     } else {
@@ -983,7 +983,7 @@ class company {
                 // We have a company manager from another company.
                 // Deal with company courses.
                 if ($CFG->iomad_autoenrol_managers && $companycourses = $DB->get_records('company_course',
-                                                        array('companyid' => $ompanyid))) {
+                                                        array('companyid' => $companyid))) {
                     foreach ($companycourses as $companycourse) {
                         if ($DB->record_exists('course', array('id' => $companycourse->courseid))) {
                             if ($DB->record_exists('company_created_courses',
@@ -1006,7 +1006,6 @@ class company {
                     // Give them the department manager role.
                     role_unassign($departmentmanagerrole->id, $userid, $systemcontext->id);
                     role_unassign($companyreporterrole->id, $userid, $systemcontext->id);
-                    role_unassign($companycourseeditorrole->id, $userid, $systemcontext->id);
                     role_assign($companymanagerrole->id, $userid, $systemcontext->id);
 
                     // Deal with course permissions.
@@ -1047,13 +1046,11 @@ class company {
                                 company_user::unenrol($userid, array($companycourse->courseid),
                                                       $companycourse->companyid);
                                 if ($educator == false) {
-                                    role_unassign($companycourseeditorrole->id, $userid, $systemcontext->id);
                                     company_user::enrol($userid, array($companycourse->courseid),
                                                         $companycourse->companyid,
                                                         $companycoursenoneditorrole->id);
                                 }
                                 else {
-                                    role_assign($companycourseeditorrole->id, $userid, $systemcontext->id);
                                     company_user::enrol($userid, array($companycourse->courseid),
                                                         $companycourse->companyid,
                                                         $companycourseeditorrole->id);
@@ -1065,7 +1062,6 @@ class company {
                     // Give them the department manager role.
                     role_unassign($companymanagerrole->id, $userid, $systemcontext->id);
                     role_unassign($departmentmanagerrole->id, $userid, $systemcontext->id);
-                    role_unassign($companycourseeditorrole->id, $userid, $systemcontext->id);
                     role_assign($companyreporterrole->id, $userid, $systemcontext->id);
 
                     // Deal with course permissions.
@@ -1132,7 +1128,6 @@ class company {
                     // Give them the company manager role.
                     role_unassign($departmentmanagerrole->id, $userid, $systemcontext->id);
                     role_unassign($companyreporterrole->id, $userid, $systemcontext->id);
-                    role_unassign($companycourseeditorrole->id, $userid, $systemcontext->id);
                     role_assign($companymanagerrole->id, $userid, $systemcontext->id);
 
                     // Deal with course permissions.
@@ -1172,17 +1167,18 @@ class company {
                             if ($DB->record_exists('course', array('id' => $companycourse->courseid))) {
                                 company_user::unenrol($userid, array($companycourse->courseid),
                                                       $companycourse->companyid);
-                                if ($educator == false) {
-                                    role_unassign($companycourseeditorrole->id, $userid, $systemcontext->id);
-                                    company_user::enrol($userid, array($companycourse->courseid),
-                                                        $companycourse->companyid,
-                                                        $companycoursenoneditorrole->id);
-                                }
-                                else {
-                                    role_assign($companycourseeditorrole->id, $userid, $systemcontext->id);
+                                if ( ($educator == true) and
+                                     ($DB->record_exists('company_created_courses',
+                                        array ('companyid' => $companyid,
+                                               'courseid' => $companycourse->courseid)))) {
                                     company_user::enrol($userid, array($companycourse->courseid),
                                                         $companycourse->companyid,
                                                         $companycourseeditorrole->id);
+                                }
+                                else {
+                                    company_user::enrol($userid, array($companycourse->courseid),
+                                                        $companycourse->companyid,
+                                                        $companycoursenoneditorrole->id);
                                 }
                             }
                         }
@@ -1224,7 +1220,6 @@ class company {
                     // Give them the department manager role.
                     role_unassign($companymanagerrole->id, $userid, $systemcontext->id);
                     role_unassign($departmentmanagerrole->id, $userid, $systemcontext->id);
-                    role_unassign($companycourseeditorrole->id, $userid, $systemcontext->id);
                     role_assign($companyreporterrole->id, $userid, $systemcontext->id);
 
                     // Deal with course permissions.
@@ -1288,7 +1283,6 @@ class company {
                     role_unassign($companymanagerrole->id, $userid, $systemcontext->id);
                     role_unassign($departmentmanagerrole->id, $userid, $systemcontext->id);
                     role_unassign($companyreporterrole->id, $userid, $systemcontext->id);
-                    role_unassign($companycourseeditorrole->id, $userid, $systemcontext->id);
                 }
                 if ($user->managertype == 1) {
                     // Deal with child companies.
