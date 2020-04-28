@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.5](https://git.agilicus.com/applications/iomad/compare/v1.2.4...v1.2.5) (2020-04-28)
+
+
+### Bug Fixes
+
+* prevent instructors from editing non-owned corses ([9fa0a24](https://git.agilicus.com/applications/iomad/commit/9fa0a246986fc822aa77eb877eb9554ba50a963a))
+
 ### [1.2.4](https://git.agilicus.com/applications/iomad/compare/v1.2.3...v1.2.4) (2020-04-27)
 
 
