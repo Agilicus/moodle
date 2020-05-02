@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.1.0 (2020-05-02)
+
+
+### Features
+
+* add /health.php endpoint for dedicated health check ([79f7724](https://git.agilicus.com/applications/iomad/commit/79f7724ca9a39c0754ebd592ffa6c8c300941f57))
+* bump upstream container to get gzip of text content ([7d838ea](https://git.agilicus.com/applications/iomad/commit/7d838eace3857d25d09c7981b31de9e9c79d5180))
+
+
+### Bug Fixes
+
+* always editing the current hosting company ([8fe93df](https://git.agilicus.com/applications/iomad/commit/8fe93dffc26a83099cdf9150df2fc54d31b58a26))
+* bump base container to get remote_addr logging, request_id correct ([d226a71](https://git.agilicus.com/applications/iomad/commit/d226a7155f0d962e509104ee2797df5e47d84aa4))
+* bump php base to get pm.start_servers fix ([9c0c42c](https://git.agilicus.com/applications/iomad/commit/9c0c42c83af29b268dfc9cd7c356cb4f6140524e))
+* bump php upstream to v0.0.4 to enable prometheus exporter ([99d2de0](https://git.agilicus.com/applications/iomad/commit/99d2de0f548a08a6cbe31c63be921a5addbf5346))
+* change to using single set with explicit expiry ([2f21aed](https://git.agilicus.com/applications/iomad/commit/2f21aed75a7dfb091cb16d5e15dde8f69d8fefdf))
+* enable gzip_vary ([4795877](https://git.agilicus.com/applications/iomad/commit/4795877fee57baa5dc672710ce7fdf36be4289b9))
+* enable sendfile, cached h5p libs ([60586b5](https://git.agilicus.com/applications/iomad/commit/60586b5248d7ad58b20d10fe30b65f5157a57e91))
+* fix course completion report ([de78f0b](https://git.agilicus.com/applications/iomad/commit/de78f0be27aaec34b3a506fad0dcf4d7eab535c5))
+* incorrect spelling on CfG ([de61683](https://git.agilicus.com/applications/iomad/commit/de61683aae4076cca6d4bb9d44c91ae365a5e4fd))
+* longer selector on css to block sign in cookie warning ([65acc93](https://git.agilicus.com/applications/iomad/commit/65acc93d6c97b6217944aca73683543cfab6c5c0))
+* make cache admin page viewable ([3d7aa2b](https://git.agilicus.com/applications/iomad/commit/3d7aa2bb5d65349d85b2edf133bb110180a08eb1))
+* oauth2 idp's lister is now company aware rather than the login page filtering idps directly ([6724226](https://git.agilicus.com/applications/iomad/commit/6724226495db0dc473f9d6495194150bfb151a56))
+* prevent instructors from editing non-owned corses ([248a8b3](https://git.agilicus.com/applications/iomad/commit/248a8b327ad45c0177de4651dd34cdb969be57fd))
+* use DB locking instead of file locking, fix certificate sql querry ([0414a56](https://git.agilicus.com/applications/iomad/commit/0414a56b4f723db00c5c204daea426f1fd794d78))
+* use smaller session lock timeouts ([6dff613](https://git.agilicus.com/applications/iomad/commit/6dff6137f03595069f6d1dc58dbaf9beb2beefb1))
+* will error on page edits now ([2fbb3c4](https://git.agilicus.com/applications/iomad/commit/2fbb3c46adfbcee3c8c20ef887ad5daaf14868fb))
+
 ### [1.2.7](https://git.agilicus.com/applications/iomad/compare/v1.2.6...v1.2.7) (2020-05-01)
 
 
