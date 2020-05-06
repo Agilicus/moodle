@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.1](https://git.agilicus.com/applications/iomad/compare/v1.5.0...v1.5.1) (2020-05-06)
+
+
+### Bug Fixes
+
+* add redis for locks, use iowat for objectfs push ([c1e4db2](https://git.agilicus.com/applications/iomad/commit/c1e4db2da93f3178c80fca99aa850541b4feb331))
+* mkdir local-cache ([1a00332](https://git.agilicus.com/applications/iomad/commit/1a00332e06eee4130edb7101b675a4e6d9e65cfe))
+* move objectfs to own cron function ([7254a45](https://git.agilicus.com/applications/iomad/commit/7254a45745113c8df8574e486bdb92172d32f261))
+
 ## [1.5.0](https://git.agilicus.com/applications/iomad/compare/v1.4.0...v1.5.0) (2020-05-06)
 
 
