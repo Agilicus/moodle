@@ -11,7 +11,7 @@ do_cron() {
     trap "echo Cron Quitting && exit 0" EXIT SIGINT SIGHUP
     echo "Cron Starting"
     <&-
-    mkdir -p /var/moodledata/filedir
+    mkdir -p /var/moodledata/filedir /var/moodledata/localcache
 
     t0=$SECONDS
     inotifywait  -q -m -r -e close_write,moved_to /var/moodledata/filedir | while read dir event file
