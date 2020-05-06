@@ -12,9 +12,9 @@ services:
   #   - POSTGRES_USER=moodle
   #   - POSTGRES_PASSWORD=moodle
   cockroach:
-    image: cockroachdb/cockroach:v19.2.4
+    image: cockroachdb/cockroach:v19.2.6
     volumes:
-    - ./cockroach-data:/cockroach/cockroach-data
+    - ./volumes/cockroach-data:/cockroach/cockroach-data
     command:
     - start-single-node
     - --insecure
@@ -22,17 +22,45 @@ services:
     image: cr.agilicus.com/open-source/titan:integration
     ports:
       - 7369:7369
+  minio:
+    image: minio/minio:latest
+    ports:
+      - 9000:9000
+    environment:
+      - MINIO_ACCESS_KEY=mycat
+      - MINIO_SECRET_KEY=hasfleas
+      - MINIO_DOMAIN=minio
+    entrypoint: sh
+    command: -c 'mkdir -p /export/agilicus-lms && /usr/bin/minio server /export'
+    volumes:
+      - ./volumes/minio:/export
   moodle:
     build: .
     restart: unless-stopped
     ports:
       - 80:5000
+    links:
+      - "minio:agilicus-lms.minio"
+    volumes:
+      - ./docker/moodle-config.php:/var/www/moodle/config.php
     environment:
-    - DB_PORT_3306_TCP_ADDR=cockroach
-    - DB_PORT_3306_TCP_PORT=26257
-    - DB_ENV_PGSQL_DATABASE=defaultdb
-    - DB_ENV_PGSQL_USER=root
-    - DB_ENV_PGSQL_PASSWORD=hello
-    - REDIS_HOST=redis
-    - REDIS_PORT=7369
-    - DEBUG=true
+      - DB_PORT_3306_TCP_ADDR=cockroach
+      - DB_PORT_3306_TCP_PORT=26257
+      - DB_ENV_PGSQL_DATABASE=defaultdb
+      - DB_ENV_PGSQL_USER=root
+      - DB_ENV_PGSQL_PASSWORD=hello
+      - REDIS_HOST=redis
+      - REDIS_PORT=7369
+      - DEBUG=true
+      - OBJECTFS_ACCESS_KEY=mycat
+      - OBJECTFS_ACCESS_SECRET=hasfleas
+      - OBJECTFS_ACCESS_BUCKET=agilicus-lms
+      - OBJECTFS_BASE_URL=http://minio:9000
+      - OVERRIDE_COMPANY=localhost
+      - ADMIN_USER=admin
+      - ADMIN_PASSWORD=foobar
+      - SMTPAUTHTYPE=
+      - SMTPSECURE=
+      - SMTPHOSTS=
+      - SMTPPASS=
+      - SMTPREPLYADDRESS=

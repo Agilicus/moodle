@@ -31,6 +31,13 @@ unset($CFG);  // Ignore this line
 global $CFG;  // This is necessary here for PHPUnit execution
 $CFG = new stdClass();
 
+function get_env_default($var, $default) {
+    if (getenv($var) == FALSE) {
+        return $default;
+    }
+    return getenv($var);
+}
+
 //=========================================================================
 // 1. DATABASE SETUP
 //=========================================================================
@@ -88,13 +95,18 @@ if (getenv('DB_SSL')) {
 $CFG->alternative_file_system_class = '\tool_objectfs\s3_file_system';
 $CFG->tool_objectfs_delete_externally = 1;
 
-# theoretically I should be able to overide these settings
-# in the config file. Doesn't seem to work.
-#$CFG->s3_key = getenv('ACCCESS_KEY_ID');
-#$CFG->s3_key = getenv('ACCCESS_SECRET');
-#$CFG->s3_bucket = getenv('S3_BUCKET');
-#$CFG->s3_base_url = 'https://storage.googleapis.com';
-
+if (getenv('OBJECTFS_ACCESS_KEY')) {
+  $CFG->s3_key = getenv('OBJECTFS_ACCESS_KEY');
+}
+if (getenv('OBJECTFS_ACCESS_SECRET')) {
+  $CFG->s3_secret = getenv('OBJECTFS_ACCESS_SECRET');
+}
+if (getenv('OBJECTFS_ACCESS_BUCKET')) {
+  $CFG->s3_bucket = getenv('OBJECTFS_ACCESS_BUCKET');
+}
+if (getenv('OBJECTFS_BASE_URL')) {
+    $CFG->s3_base_url = getenv('OBJECTFS_BASE_URL');
+}
 
 
 //=========================================================================
@@ -416,7 +428,7 @@ if ( getenv('SSL_PROXY') == "true" ) {
 // The following setting will turn SQL Error logging on. This will output an
 // entry in apache error log indicating the position of the error and the statement
 // called. This option will action disregarding error_reporting setting.
-//     $CFG->dblogerror = true;
+$CFG->dblogerror = true;
 //
 // The following setting will log every database query to a table called adodb_logsql.
 // Use this setting on a development server only, the table grows quickly!
@@ -835,11 +847,12 @@ $CFG->noninteractive = true;
 $CFG->agreelicense = 'yes';
 
 if (getenv('DEBUG')) {
-    $CFG->debug = (E_ALL | E_STRICT); 
+    $CFG->debug = (E_ALL | E_STRICT);
     $CFG->debugdisplay = 1;
     $CFG->debugdeveloper =1;
     $CFG->phpunit_dataroot  = '/var/www/phpunitdata';
     $CFG->phpunit_prefix = 't_';
+    @error_reporting(E_ALL | E_STRICT); // NOT FOR PRODUCTION SERVERS!
 }
 
 // Security settings
@@ -851,13 +864,12 @@ $CFG->allowframeembedding= '0';
 
 
 // SMTP configs
-$CFG->smtphosts = 'smtp.gmail.com:587';
-$CFG->smtpsecure = 'tls';
-$CFG->smtpauthtype = 'XOAUTH2';
-// A password needs to be configured but is not used.
-$CFG->smtppass = 'notarealpassword';
+$CFG->smtpsecure = get_env_default('SMTPSECURE', 'tls');
 $CFG->smtpmaxbulk='100';
-$CFG->noreplyaddress='cloud-training@agilicus.com';
+$CFG->smtphosts = get_env_default('SMTPHOSTS','smtp.gmail.com:587');
+$CFG->smtpauthtype = get_env_default('SMTPAUTHTYPE', 'XOAUTH2');
+$CFG->smtppass = get_env_default('SMTPPASS', 'notarealpassword');
+$CFG->noreplyaddress = get_env_default('SMTPREPLYADDRESS','cloud-training@agilicus.com');
 
 if (php_sapi_name()!= 'cli'){
     preg_match('/(?<=lms.)(.*)/', $_SERVER['HTTP_HOST'], $company);
@@ -866,6 +878,9 @@ if (php_sapi_name()!= 'cli'){
     } else {
         $CFG->requested_company = False;
     }
+}
+if (getenv('OVERRIDE_COMPANY')) {
+    $CFG->requested_company = getenv('OVERRIDE_COMPANY');
 }
 //=========================================================================
 // ALL DONE!  To continue installation, visit your main page with a browser
