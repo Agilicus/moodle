@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://git.agilicus.com/applications/iomad/compare/v1.4.0...v1.5.0) (2020-05-06)
+
+
+### Features
+
+* add developer niceties for local running ([f9ceef3](https://git.agilicus.com/applications/iomad/commit/f9ceef378381e20eecf9b0753bcbbf991a3e41f7))
+
 ## [1.4.0](https://git.agilicus.com/applications/iomad/compare/v1.3.0...v1.4.0) (2020-05-06)
 
 
