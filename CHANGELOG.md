@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://git.agilicus.com/applications/iomad/compare/v1.3.0...v1.4.0) (2020-05-06)
+
+
+### Features
+
+* move cron into main container ([46ea579](https://git.agilicus.com/applications/iomad/commit/46ea579d3bbfcd8cb1dd00ce2135a529e43506b1))
+
 ## 1.1.0 (2020-05-02)
 
 
