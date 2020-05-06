@@ -3,4 +3,6 @@
 *.txt
 Dockerfile
 .gitlab-ci.yml
-cockroach-data
+volumes
+docker-compose.yaml
+docker-compose-local.yaml
