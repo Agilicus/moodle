@@ -7,12 +7,8 @@
 # Don't wake up more than every 2 seconds to avoid a storm
 # of file changes.
 
-do_cron() {
-    trap "echo Cron Quitting && exit 0" EXIT SIGINT SIGHUP
-    echo "Cron Starting"
-    <&-
-    mkdir -p /var/moodledata/filedir /var/moodledata/localcache
-
+objectfs_sync() {
+    trap "echo Cron Objectfs Quitting && exit 0" EXIT SIGINT SIGHUP
     t0=$SECONDS
     inotifywait  -q -m -r -e close_write,moved_to /var/moodledata/filedir | while read dir event file
     do
@@ -23,7 +19,17 @@ do_cron() {
             php admin/tool/task/cli/schedule_task.php --execute=\\tool_objectfs\\task\\push_objects_to_storage
         fi
         t0=$t1
-    done &
+    done
+}
+
+do_cron() {
+    trap "echo Cron Quitting && exit 0" EXIT SIGINT SIGHUP
+    echo "Cron Starting"
+    <&-
+    mkdir -p /var/moodledata/filedir /var/moodledata/localcache
+
+    objectfs_sync &
+
     while true
     do
         sleep 60
