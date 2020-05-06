@@ -7,7 +7,8 @@ $plugins=array(
     "moodle-local_csp"=> array("https://github.com/catalyst/moodle-local_csp.git", "834589c51dbc79ceb7703bfb7a8d773433d69a9b", "/local/csp"),
     "moodle-tool_objectfs"=> array("https://github.com/Agilicus/moodle-tool_objectfs", "51225679dd020208f548af2c6cee8be448954abc", "/admin/tool/objectfs/"),
     "moodle-tool_heartbeat"=> array("https://github.com/catalyst/moodle-tool_heartbeat.git", "f6ee68218e33b2d8cb29574edacb56e603cdd196", "/admin/tool/heartbeat/"),
-    "h5p-moodle-plugin"=> array("https://github.com/h5p/h5p-moodle-plugin.git", "6d0a8aa7211842c0d89b1cb18300186b04da04d0", "/mod/hvp/")
+    "h5p-moodle-plugin"=> array("https://github.com/h5p/h5p-moodle-plugin.git", "6d0a8aa7211842c0d89b1cb18300186b04da04d0", "/mod/hvp/"),
+    "moodle-local_redislock"=> array("https://github.com/Agilicus/moodle-local_redislock.git", "e67bfd8c192cb76832f117b75bd8e11288116d16", "/local/redislock")
 );
 
 foreach($plugins as $plugin => $settings) {
@@ -19,7 +20,7 @@ foreach($plugins as $plugin => $settings) {
 
     echo $git_clone_cmd . "\n";
     echo shell_exec($git_clone_cmd);
-   
+
     $mkdir_cmd = 'mkdir -p '. $installdir;
     echo $mkdir_cmd . "\n";
     echo shell_exec($mkdir_cmd);

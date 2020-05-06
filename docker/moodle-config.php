@@ -311,6 +311,10 @@ $CFG->xsendfilealiases = array(
 //         session problems. **
 
 if  (getenv('REDIS_HOST')) {
+    $CFG->local_redislock_redis_server = getenv('REDIS_HOST');
+    $CFG->local_redislock_redis_port = getenv('REDIS_PORT');
+    $CFG->local_redislock_redis_auth = getenv('REDIS_TOKEN');
+
     $CFG->session_handler_class = '\core\session\redis';
     $CFG->session_redis_host = getenv('REDIS_HOST');
     $CFG->session_redis_port = getenv('REDIS_PORT');
@@ -593,7 +597,11 @@ $CFG->preventexecpath = true;
 //      Uses lock files stored by default in the dataroot. Whether this
 //      works on clusters depends on the file system used for the dataroot.
 //
-$CFG->lock_factory = "\\core\\lock\\db_record_lock_factory" ; # - DB locking based on table rows.
+if  (getenv('REDIS_HOST')) {
+    $CFG->lock_factory = "\\local_redislock\\lock\\redis_lock_factory";
+} else {
+    $CFG->lock_factory = "\\core\\lock\\db_record_lock_factory" ; # - DB locking based on table rows.
+}
 //
 // "\\core\\lock\\postgres_lock_factory" - DB locking based on postgres advisory locks.
 //
