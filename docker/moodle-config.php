@@ -92,18 +92,28 @@ if (getenv('DB_SSL')) {
 //=========================================================================
 
 
-$CFG->forced_plugin_settings = array('tool_objectfs'  =>
+if (getenv('OBJECTFS_ACCESS_KEY') && getenv('OBJECTFS_ACCESS_SECRET') && getenv('OBJECTFS_ACCESS_BUCKET') )
+{
+    $CFG->forced_plugin_settings = array('tool_objectfs'  => 
+        array(
+            'filesystem' => '\tool_objectfs\s3_file_system', 
+            'deletelocal' => '0',
+            'enabletasks' => '1',
+            'consistencydelay' => '0',
+            'sizethreshold' => '0',
+            's3_key' => getenv('OBJECTFS_ACCESS_KEY'),
+            's3_secret' => getenv('OBJECTFS_ACCESS_SECRET'),
+            's3_bucket' => getenv('OBJECTFS_ACCESS_BUCKET'),
+            's3_base_url' => getenv('OBJECTFS_BASE_URL')
+        )
+    );
+} else {
+    $CFG->forced_plugin_settings = array('tool_objectfs'  => 
     array(
-        'filesystem' => '\tool_objectfs\s3_file_system',
-        'deletelocal' => '0',
-        'consistencydelay' => '0',
-        'sizethreshold' => '0',
-        's3_key' => getenv('OBJECTFS_ACCESS_KEY'),
-        's3_secret' => getenv('OBJECTFS_ACCESS_SECRET'),
-        's3_bucket' => getenv('OBJECTFS_ACCESS_BUCKET'),
-        's3_base_url' => getenv('OBJECTFS_BASE_URL')
+        'enabletasks' => '0',
     )
 );
+}
 
 //=========================================================================
 // 2. WEB SITE LOCATION
