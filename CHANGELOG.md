@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.2](https://git.agilicus.com/applications/iomad/compare/v1.5.1...v1.5.2) (2020-05-07)
+
+
+### Bug Fixes
+
+* s3 settings overidden in config ([3e7d19d](https://git.agilicus.com/applications/iomad/commit/3e7d19d187173f619392f050b822604aa89177d6))
+
 ### [1.5.1](https://git.agilicus.com/applications/iomad/compare/v1.5.0...v1.5.1) (2020-05-06)
 
 
