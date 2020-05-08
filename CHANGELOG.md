@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://git.agilicus.com/applications/iomad/compare/v1.5.2...v1.6.0) (2020-05-08)
+
+
+### Features
+
+* enable xdebug debugging ([fc93361](https://git.agilicus.com/applications/iomad/commit/fc93361d5c1e77b1234c52eca374dc08fea4c8d2))
+
 ### [1.5.2](https://git.agilicus.com/applications/iomad/compare/v1.5.1...v1.5.2) (2020-05-07)
 
 
