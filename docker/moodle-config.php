@@ -107,6 +107,8 @@ if (getenv('OBJECTFS_ACCESS_KEY') && getenv('OBJECTFS_ACCESS_SECRET') && getenv(
             's3_base_url' => getenv('OBJECTFS_BASE_URL')
         )
     );
+    $CFG->alternative_file_system_class = '\tool_objectfs\s3_file_system';
+
 } else {
     $CFG->forced_plugin_settings = array('tool_objectfs'  => 
     array(
