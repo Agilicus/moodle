@@ -46,6 +46,7 @@ services:
       - ./docker/moodle-config.php:/var/www/moodle/config.php
       - ./docker/99-xdebug.ini:/etc/php/7.4/fpm/conf.d/99-xdebug.ini
       - ./docker/nginx-debug.conf:/etc/nginx/conf.d/nginx-debug.conf
+      - ./docker/muc-config.php:/var/moodledata/muc/config.php
     environment:
       - DB_PORT_3306_TCP_ADDR=cockroach
       - DB_PORT_3306_TCP_PORT=26257
@@ -62,7 +63,7 @@ services:
       - OVERRIDE_COMPANY=localhost
       - ADMIN_USER=admin
       - ADMIN_PASSWORD=foobar
-      - SMTPAUTHTYPE=
+      - SMTPAUTHTYPE=LOGIN
       - SMTPSECURE=
       - SMTPHOSTS=
       - SMTPPASS=

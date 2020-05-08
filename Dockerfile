@@ -9,8 +9,8 @@ COPY docker/nginx.conf /etc/nginx/conf.d/moodle.conf
 COPY docker/health.php /var/www/moodle/health.php
 COPY docker/cron.sh /startup.d/cron.sh
 
-RUN mkdir /var/www/phpunitdata /var/moodledata \
- && chown web:web /var/www/phpunitdata /var/moodledata \
+RUN mkdir -p /var/www/phpunitdata /var/moodledata/muc \
+ && chown -R web:web /var/www/phpunitdata /var/moodledata \
  && php docker/install_plugins.php \
  && chown -R web:web /var/www/moodle \
  && chmod 555 /startup.d/cron.sh
