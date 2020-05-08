@@ -33,3 +33,52 @@ docker-compose exec cockroach /cockroach/cockroach sql --insecure -e "insert int
 ```
 
 Now open a browser to [here](http://localhost/login/index.php), initial user/password is admin/foobar.
+
+## Debugging
+
+In `codium`, install
+```
+ext install ms-vscode-remote.vscode-remote-extensionpack
+ext install felixfbecker.php-debug
+ext install felixfbecker.php-pack
+ext install felixfbecker.php-intellisense
+```
+Run `codium` as:
+```
+codium --enable-proposed-api ms-vscode-remote.remote-containers .
+```
+
+Add a launch task as:
+```
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Listen for XDebug",
+            "type": "php",
+            "request": "launch",
+            "port": 9001,
+            "pathMappings": {
+              "/var/www/moodle": "${workspaceRoot}"
+            }
+        },
+        {
+            "name": "Launch currently open script",
+            "type": "php",
+            "request": "launch",
+            "program": "${file}",
+            "cwd": "${fileDirname}",
+            "port": 9001
+        }
+    ]
+}
+```
+
+Select `Run/Start Debugging`. Use the `Listen for XDebug` option.
+Use the application, it will come to the debugger when you
+add `XDEBUG_SESSION_START=VSCODE` as a parameter to GET,
+or to POST, or set a cookie named that.
+
