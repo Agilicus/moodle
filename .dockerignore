@@ -6,3 +6,12 @@ Dockerfile
 volumes
 docker-compose.yaml
 docker-compose-local.yaml
+
+## Don't add plugins that might be checked out for debugging
+admin/tool/heartbeat/
+admin/tool/objectfs/
+local/aws/
+local/csp/
+local/redislock/
+mod/hvp/
+

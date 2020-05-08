@@ -82,3 +82,9 @@ Use the application, it will come to the debugger when you
 add `XDEBUG_SESSION_START=VSCODE` as a parameter to GET,
 or to POST, or set a cookie named that.
 
+You may wish to run:
+```
+MOODLE_INSTALL_DIR=. php docker/install_plugins.php
+```
+
+on your host first.

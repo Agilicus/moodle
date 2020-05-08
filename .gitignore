@@ -46,3 +46,12 @@ atlassian-ide-plugin.xml
 /node_modules/
 cockroach-data
 volumes
+
+## Local add: avoid committing plugins used for debugging
+admin/tool/heartbeat/
+admin/tool/objectfs/
+local/aws/
+local/csp/
+local/redislock/
+mod/hvp/
+
