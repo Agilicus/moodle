@@ -37,12 +37,15 @@ services:
   moodle:
     build: .
     restart: unless-stopped
+    privileged: true
     ports:
       - 80:5000
     links:
       - "minio:agilicus-lms.minio"
     volumes:
       - ./docker/moodle-config.php:/var/www/moodle/config.php
+      - ./docker/99-xdebug.ini:/etc/php/7.4/fpm/conf.d/99-xdebug.ini
+      - ./docker/nginx-debug.conf:/etc/nginx/conf.d/nginx-debug.conf
     environment:
       - DB_PORT_3306_TCP_ADDR=cockroach
       - DB_PORT_3306_TCP_PORT=26257
