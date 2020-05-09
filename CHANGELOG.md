@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.2](https://git.agilicus.com/applications/iomad/compare/v1.7.1...v1.7.2) (2020-05-09)
+
+
+### Bug Fixes
+
+* add write perm to /var/lib/php/sessions ([0f2df97](https://git.agilicus.com/applications/iomad/commit/0f2df976a7a2f9a4948dcf9d109f8b57952277d1))
+
 ### [1.7.1](https://git.agilicus.com/applications/iomad/compare/v1.7.0...v1.7.1) (2020-05-08)
 
 ## [1.7.0](https://git.agilicus.com/applications/iomad/compare/v1.6.2...v1.7.0) (2020-05-08)
