@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0](https://git.agilicus.com/applications/iomad/compare/v1.7.2...v1.8.0) (2020-05-10)
+
+
+### Features
+
+* pre-generate theme cache, remove extra logs from cron ([29dc354](https://git.agilicus.com/applications/iomad/commit/29dc354c8825b835895d45a2dedb9123be4c997f))
+
 ### [1.7.2](https://git.agilicus.com/applications/iomad/compare/v1.7.1...v1.7.2) (2020-05-09)
 
 
