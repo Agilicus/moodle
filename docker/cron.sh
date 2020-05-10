@@ -26,17 +26,24 @@ do_cron() {
     trap "echo Cron Quitting && exit 0" EXIT SIGINT SIGHUP
     echo "Cron Starting"
     <&-
+
+    # Asynchronously setup the caches while the main startup goes
     mkdir -p /var/moodledata/filedir /var/moodledata/localcache
+    echo "$(date -Is): build theme cache"
+    php admin/cli/build_theme_css.php --themes=iomad
+    php admin/cli/build_theme_css.php --themes=iomadboost
 
     objectfs_sync &
 
+    echo "$(date -Is): Cron: 60s start loop"
     while true
     do
-        sleep 60
-        echo "$(date -Is): Cron: 60s wakeup call"
+        # Add a bit of jitter to prevent beating effect
+        sleep $(( $RANDOM % 5 + 60))
         php admin/cli/cron.php >/dev/null
         kill -0 1 || exit 0
     done
+    echo "$(date -Is): Cron: 60s end loop"
 }
 
 do_cron &
