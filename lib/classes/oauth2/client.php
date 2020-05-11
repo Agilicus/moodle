@@ -140,6 +140,17 @@ class client extends \oauth2_client {
     }
 
     /**
+     * Returns the userinfo url for OAuth 2.0 request
+     *
+     * We are overriding the parent function so we get this from the configured endpoint.
+     *
+     * @return string the auth url
+     */
+    protected function userinfo_url() {
+        return $this->issuer->get_endpoint_url('userinfo');
+    }
+
+    /**
      * We want a unique key for each issuer / and a different key for system vs user oauth.
      *
      * @return string The unique key for the session value.
@@ -282,7 +293,7 @@ class client extends \oauth2_client {
         # or use sticky sessions during login
         $idtoken = new stdClass;
         $idtoken->token = $r->id_token;
-        $this->idtoken = idtoken;
+        $this->idtoken = $idtoken;
 
         if (isset($r->refresh_token)) {
             $systemaccount->set('refreshtoken', $r->refresh_token);
@@ -313,8 +324,23 @@ class client extends \oauth2_client {
         try {
             $userinfo = json_decode($token_json, TRUE);
         } catch (\Exception $e) {
-            error_log( 'could not decode json' );
-            return false;
+            throw new moodle_exception('Could not fetch userinfo(id_token)');
+        }
+
+        // If the id_token doesn't have userinfo, call the userinfo
+        // endpoint
+        if (!in_array('email', $userinfo)) {
+            $response = $this->get($this->userinfo_url());
+
+            if ($this->info['http_code'] !== 200) {
+                throw new moodle_exception('Could not fetch userinfo');
+            }
+
+            try {
+                $userinfo = json_decode($response, true);
+            } catch (\Exception $e) {
+                throw new moodle_exception('Could not fetch userinfo(endpoint)');
+            }
         }
 
         $map = $this->get_userinfo_mapping();
@@ -342,28 +368,40 @@ class client extends \oauth2_client {
             }
         }
 
-        $user->email = $userinfo['email'];
-        $user->username = $user->email;
-        $user->fullname = $userinfo['name'];
+        try {
+            $user->email = $userinfo['email'];
+            $user->username = $user->email;
+            $user->fullname = $userinfo['name'];
 
-        
-        $user->firstname = $userinfo['https://api.agilicus.com/user']['first_name'];
-        $user->lastname = $userinfo['https://api.agilicus.com/user']['last_name'];
+            $user->firstname = $userinfo['https://api.agilicus.com/user']['first_name'];
+            $user->lastname = $userinfo['https://api.agilicus.com/user']['last_name'];
 
-        $agilicus_roles = array('admin', 'manager', 'instructor', 'user', 'ignore');
-        
-        
-        foreach ($agilicus_roles as $x) $agilicus_role_map[$x] = false;
-        $user->agilicus_role_map = $agilicus_role_map;
+            $agilicus_roles = array('admin', 'manager', 'instructor', 'user', 'ignore');
 
-        # verify that we got this token from an expected issuer for this company
-        preg_match('/(?<=https:\/\/auth.)(.*)\//', $userinfo['iss'], $company);
+            foreach ($agilicus_roles as $x) {
+                $agilicus_role_map[$x] = false;
+            }
+            $user->agilicus_role_map = $agilicus_role_map;
+        } catch (\Exception $e) {
+            error_log( 'could not decode userinfo' );
+            return false;
+        }
 
-         # we don't know what company they came from so we should kick them out.
-        if ((!$CFG->requested_company) || False === (strpos($CFG->requested_company, $company[1]))|| (!$DB->record_exists_sql('SELECT id FROM mdl_company WHERE name=?', array($CFG->requested_company)))) {
-            error_log('issuer-company mismatch');
-            $user->errormsg = 'could not determine refering company';
-            return (array)$user;
+        if (empty($CFG->requested_company)) {
+            # verify that we got this token from an expected issuer for this company
+            try {
+                // Note: I think this should be $this->idtoken, not $userinfo
+                preg_match('/(?<=https:\/\/auth.)(.*)\//', $userinfo['iss'], $company);
+            } catch (\Exception $e) {
+                error_log("error: cannot match auth.ORG in idtoken issuer");
+                return false;
+            }
+
+            # we don't know what company they came from so we should kick them out.
+            if (!$DB->record_exists_sql('SELECT id FROM mdl_company WHERE name=?', array($CFG->requested_company))) {
+                error_log('issuer-company mismatch');
+                return false;
+            }
         }
 
         $user->company = $CFG->requested_company;
