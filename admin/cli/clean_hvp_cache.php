@@ -81,6 +81,7 @@ try {
 
     if (!$rawdata) {
         echo "nothing to clean!";
+        $transaction->allow_commit();
         exit;
     }
 
