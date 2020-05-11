@@ -887,16 +887,17 @@ $CFG->smtpauthtype = get_env_default('SMTPAUTHTYPE', 'XOAUTH2');
 $CFG->smtppass = get_env_default('SMTPPASS', 'notarealpassword');
 $CFG->noreplyaddress = get_env_default('SMTPREPLYADDRESS','cloud-training@agilicus.com');
 
-if (php_sapi_name()!= 'cli'){
-    preg_match('/(?<=lms.)(.*)/', $_SERVER['HTTP_HOST'], $company);
-    if ($company) {
-        $CFG->requested_company = $company[1];
-    } else {
-        $CFG->requested_company = False;
-    }
-}
-if (getenv('OVERRIDE_COMPANY')) {
+if (getenv('OVERRIDE_COMPANY') != FALSE) {
     $CFG->requested_company = getenv('OVERRIDE_COMPANY');
+} else {
+    if (php_sapi_name()!= 'cli'){
+        preg_match('/(?<=lms.)(.*)/', $_SERVER['HTTP_HOST'], $company);
+        if ($company) {
+            $CFG->requested_company = $company[1];
+        } else {
+            $CFG->requested_company = False;
+        }
+    }
 }
 //=========================================================================
 // ALL DONE!  To continue installation, visit your main page with a browser
