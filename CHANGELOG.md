@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.9.0](https://git.agilicus.com/applications/iomad/compare/v1.8.0...v1.9.0) (2020-05-11)
+
+
+### Features
+
+* enable use of tame issuer ([b710a27](https://git.agilicus.com/applications/iomad/commit/b710a27e3e6a52be30d43f22046cd4c5d113e2e9))
+
 ## [1.8.0](https://git.agilicus.com/applications/iomad/compare/v1.7.2...v1.8.0) (2020-05-10)
 
 
