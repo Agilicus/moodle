@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.9.1](https://git.agilicus.com/applications/iomad/compare/v1.9.0...v1.9.1) (2020-05-12)
+
+
+### Bug Fixes
+
+* redis connect was passing a read_interval as 1000x what it meant ([b2a9f87](https://git.agilicus.com/applications/iomad/commit/b2a9f87fdb5b37ac7e24d9c3980cd8899689f669))
+* resolve Error on cron run in cache/classes/helper.php ([bc86ad3](https://git.agilicus.com/applications/iomad/commit/bc86ad38bc3f243c4dd46e18f7c201e79f8ba655))
+
 ## [1.9.0](https://git.agilicus.com/applications/iomad/compare/v1.8.0...v1.9.0) (2020-05-11)
 
 
