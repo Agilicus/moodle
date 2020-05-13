@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.9.3](https://git.agilicus.com/applications/iomad/compare/v1.9.2...v1.9.3) (2020-05-13)
+
+
+### Bug Fixes
+
+* enable read only sessions is boolean, not string ([ee3de1e](https://git.agilicus.com/applications/iomad/commit/ee3de1e09febe8e9789569eeda5e495ccf8af3fc))
+* reduce debug level (debugging local use only) ([bbb0091](https://git.agilicus.com/applications/iomad/commit/bbb0091d1820c1f8ed204d939202ebe2730a25bd))
+
 ### [1.9.2](https://git.agilicus.com/applications/iomad/compare/v1.9.1...v1.9.2) (2020-05-13)
 
 
