@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.9.2](https://git.agilicus.com/applications/iomad/compare/v1.9.1...v1.9.2) (2020-05-13)
+
+
+### Bug Fixes
+
+* correct session w/ read-only and mobile-app ([f4e6a12](https://git.agilicus.com/applications/iomad/commit/f4e6a12414abf595567c77f89fc8d2ded659cec7))
+
 ### [1.9.1](https://git.agilicus.com/applications/iomad/compare/v1.9.0...v1.9.1) (2020-05-12)
 
 
