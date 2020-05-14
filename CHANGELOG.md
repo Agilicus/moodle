@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.1](https://git.agilicus.com/applications/iomad/compare/v1.10.0...v1.10.1) (2020-05-14)
+
+
+### Bug Fixes
+
+* all paths now commit transactions ([de345d1](https://git.agilicus.com/applications/iomad/commit/de345d1c8bca9f62b13dfcd36d02c5102c8373af))
+* now cleans all dangling cached files (css and js), from the three tables: mdl_tool_objectfs_objects, mdl_hvp_libraries_cachedassets, mdl_files ([381d27b](https://git.agilicus.com/applications/iomad/commit/381d27b212cca4d9854ef601bb22ecc56ec4e4e2))
+* now cleans all dangling cached files (css and js), from the three tables: mdl_tool_objectfs_objects, mdl_hvp_libraries_cachedassets, mdl_files ([1b8915a](https://git.agilicus.com/applications/iomad/commit/1b8915a563e8bfc3fc1d3bfab18bbebdf103971c))
+
 ## [1.10.0](https://git.agilicus.com/applications/iomad/compare/v1.9.3...v1.10.0) (2020-05-14)
 
 
