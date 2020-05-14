@@ -9,7 +9,8 @@ $plugins=array(
     "moodle-tool_heartbeat"=> array("https://github.com/catalyst/moodle-tool_heartbeat.git", "f6ee68218e33b2d8cb29574edacb56e603cdd196", "/admin/tool/heartbeat/"),
     "h5p-moodle-plugin"=> array("https://github.com/h5p/h5p-moodle-plugin.git", "6d0a8aa7211842c0d89b1cb18300186b04da04d0", "/mod/hvp/"),
     "moodle-local_redislock"=> array("https://github.com/Agilicus/moodle-local_redislock.git", "e67bfd8c192cb76832f117b75bd8e11288116d16", "/local/redislock"),
-    "moodle-tool_webanalytics"=> array("https://github.com/catalyst/moodle-tool_webanalytics.git", "b36d4a24eed7fb6652ef28a6ea37e8db8b0e2cd4", "/admin/tool/webanalytics")
+    "moodle-tool_webanalytics"=> array("https://github.com/catalyst/moodle-tool_webanalytics.git", "b36d4a24eed7fb6652ef28a6ea37e8db8b0e2cd4", "/admin/tool/webanalytics"),
+    "moodle-filter_multiembed"=> array("https://github.com/frederic-nevers/moodle-filter_multiembed.git", "f6856b9e38943f8c2ce4c2130544f2763551729b", "/filter/multiembed")
 );
 
 foreach($plugins as $plugin => $settings) {
