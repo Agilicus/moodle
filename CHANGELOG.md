@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.10.0](https://git.agilicus.com/applications/iomad/compare/v1.9.3...v1.10.0) (2020-05-14)
+
+
+### Features
+
+* add moosh shell ([464e4fc](https://git.agilicus.com/applications/iomad/commit/464e4fcf01c12957d8007a4c8c45c779f816e462))
+
 ### [1.9.3](https://git.agilicus.com/applications/iomad/compare/v1.9.2...v1.9.3) (2020-05-13)
 
 
