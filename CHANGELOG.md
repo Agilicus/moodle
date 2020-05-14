@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.11.0](https://git.agilicus.com/applications/iomad/compare/v1.10.1...v1.11.0) (2020-05-14)
+
+
+### Features
+
+* enable multiembed plugin ([36cd775](https://git.agilicus.com/applications/iomad/commit/36cd775ad6662c7571dc55e6b3388edc429b7809))
+
 ### [1.10.1](https://git.agilicus.com/applications/iomad/compare/v1.10.0...v1.10.1) (2020-05-14)
 
 
