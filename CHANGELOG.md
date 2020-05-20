@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.12.0](https://git.agilicus.com/applications/iomad/compare/v1.11.0...v1.12.0) (2020-05-20)
+
+
+### Features
+
+* allow custom authentication instructions per company in iomad ([8c39354](https://git.agilicus.com/applications/iomad/commit/8c393546f0b30464085de24a8ff4529fc979d279))
+
 ## [1.11.0](https://git.agilicus.com/applications/iomad/compare/v1.10.1...v1.11.0) (2020-05-14)
 
 
