@@ -411,6 +411,10 @@ class company_edit_form extends \company_moodleform {
                                     get_string('customcss', 'block_iomad_company_admin'),
                                     'wrap="virtual" rows="20" cols="75"');
                 $mform->setType('customcss', PARAM_RAW);
+                $mform->addElement('textarea', 'customauthinstruction',
+                                    get_string('customauthinstruction', 'block_iomad_company_admin'),
+                                    'wrap="virtual" rows="20" cols="75"');
+                $mform->setType('customcss', PARAM_RAW);
                 $mform->addElement('iomad_colourpicker', 'headingcolor', get_string('headingcolor', 'block_iomad_company_admin'), 'size="20"');
                 $mform->setType('headingcolor', PARAM_CLEAN);
                 $mform->addElement('iomad_colourpicker', 'maincolor', get_string('maincolor', 'block_iomad_company_admin'), 'size="20"');
@@ -424,6 +428,8 @@ class company_edit_form extends \company_moodleform {
                 $mform->setType('id_companylogo', PARAM_CLEAN);
                 $mform->addElement('hidden', 'customcss');
                 $mform->setType('customcss', PARAM_RAW);
+                $mform->addElement('hidden', 'customauthinstruction');
+                $mform->setType('customauthinstruction', PARAM_RAW);
                 $mform->addElement('hidden', 'headingcolor');
                 $mform->setType('headingcolor', PARAM_CLEAN);
                 $mform->addElement('hidden', 'maincolor');
@@ -437,6 +443,7 @@ class company_edit_form extends \company_moodleform {
                                 get_string('custommenuitems', 'admin'),
                                 'wrap="virtual" rows="20" cols="75"');
             $mform->setType('customcss', PARAM_RAW);
+            $mform->setType('customauthinstruction', PARAM_RAW);
             $mform->addElement('HTML', get_string('configcustommenuitems', 'admin'));
         } else {
                 $mform->addElement('hidden', 'theme', $this->companyrecord->theme);
@@ -445,6 +452,8 @@ class company_edit_form extends \company_moodleform {
                 $mform->setType('companylogo', PARAM_CLEAN);
                 $mform->addElement('hidden', 'customcss');
                 $mform->setType('customcss', PARAM_RAW);
+                $mform->addElement('hidden', 'customauthinstruction');
+                $mform->setType('customauthinstruction', PARAM_RAW);
         }
 
         // Only show the certificate section if you have capability.

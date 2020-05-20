@@ -27,6 +27,7 @@
         <FIELD NAME="profileid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Holds the default company profile category"/>
         <FIELD NAME="suspended" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="To keep track is a company is suspended."/>
         <FIELD NAME="customcss" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="To hold company specific CSS for the Iomad and Bootstrap themes"/>
+        <FIELD NAME="customauthinstruction" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="To hold custom authentication instructions on login screen"/>
         <FIELD NAME="maincolor" TYPE="char" LENGTH="20" NOTNULL="false" DEFAULT="null" SEQUENCE="false"/>
         <FIELD NAME="headingcolor" TYPE="char" LENGTH="20" NOTNULL="false" DEFAULT="null" SEQUENCE="false"/>
         <FIELD NAME="linkcolor" TYPE="char" LENGTH="20" NOTNULL="false" DEFAULT="null" SEQUENCE="false"/>

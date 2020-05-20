@@ -111,7 +111,7 @@ if (!$new) {
                     $index == 'companylogo' || $index == 'uselogo' || $index == 'usesignature' ||
                     $index == 'usewatermark' || $index == 'useborder' || $index == 'showgrade' ||
                     $index == 'companycertificateseal' || $index == 'companycertificatesignatue' || $index == 'companycertificateborder' ||
-                    $index == 'companycertificatewatermark' || $index == 'currentparentid') {
+                    $index == 'companycertificatewatermark' || $index == 'currentparentid' || $index == 'customauthinstruction') {
                     continue;
                 } else {
                     $companyrecord->$index = $value;
@@ -194,6 +194,9 @@ if (!empty($new) && !empty($parentid)) {
     }
     if (!empty($parentcompanyoptions->customcss)) {
         $companyrecord->customcss = $parentcompanyoptions->customcss;
+    }
+    if (!empty($parentcompanyoptions->customauthinstruction)) {
+        $companyrecord->customauthinstruction = $parentcompanyoptions->customauthinstruction;
     }
     if (!empty($parentcompanyoptions->maincolor)) {
         $companyrecord->maincolor = $parentcompanyoptions->maincolor;
