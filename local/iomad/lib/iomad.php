@@ -174,6 +174,23 @@ class iomad {
          }
      }
 
+    /**
+     * Get the company Custom auth instructions given an ID.
+     *
+     * Parameters = $companyid = int;
+     *
+     * Returns text;
+     **/
+     public static function get_company_authinstructions($company) {
+         global $DB;
+
+         if ($companyauthinstructions = $DB->get_field('company', 'customauthinstruction', array('shortname' => $company))) {
+             return $companyauthinstructions;
+         } else {
+             return '';
+         }
+     }
+
      /**
       * Get the company main colour given an ID.
       *

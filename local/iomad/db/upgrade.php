@@ -2159,5 +2159,20 @@ function xmldb_local_iomad_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2019030109, 'local', 'iomad');
     }
 
+    if ($oldversion < 2020052000) {
+
+        // Define field customauthinstruction to be added to company.
+        $table = new xmldb_table('company');
+        $field = new xmldb_field('customauthinstruction', XMLDB_TYPE_TEXT, null, null, null, null, null, null);
+
+        // Conditionally launch add field customauthinstruction
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Iomad savepoint reached.
+        upgrade_plugin_savepoint(true, 2020052000, 'local', 'iomad');
+    }
+
     return $result;
 }
