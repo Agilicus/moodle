@@ -16,8 +16,8 @@ RUN mkdir -p /var/www/phpunitdata /var/moodledata/muc \
  && chmod 555 /startup.d/cron.sh \
  && curl -s https://binaries.cockroachdb.com/cockroach-v20.1.0.linux-amd64.tgz | tar -xzf - -C /bin --strip-components=1 \
  && chmod a=rx /bin/cockroach \
- && git clone git://github.com/Agilicus/moosh.git /moosh \
- && cd /moosh; git checkout add-cockroachdb; composer install \
+ && git clone https://github.com/tmuras/moosh.git /moosh \
+ && cd /moosh; git checkout b0c39b47931c2f90fc083abef210adade20e5cd1; composer install \
  && ln -s $PWD/moosh.php /bin/moosh
 
 USER web
