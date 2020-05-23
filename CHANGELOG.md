@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.1](https://git.agilicus.com/applications/iomad/compare/v1.12.0...v1.12.1) (2020-05-23)
+
+
+### Bug Fixes
+
+* revert to moosh upstream from our branch for cockroachdb ([73c417b](https://git.agilicus.com/applications/iomad/commit/73c417b5b2c2abf727cfd35c01c23e712ff3082e)), closes [/github.com/tmuras/moosh/pull/314#event-3367184851](https://git.agilicus.com/applications//github.com/tmuras/moosh/pull/314/issues/event-3367184851)
+
 ## [1.12.0](https://git.agilicus.com/applications/iomad/compare/v1.11.0...v1.12.0) (2020-05-20)
 
 
