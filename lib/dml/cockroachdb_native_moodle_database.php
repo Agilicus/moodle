@@ -147,47 +147,6 @@ class cockroachdb_native_moodle_database extends pgsql_native_moodle_database {
     public function session_lock_supported() {
         return false;
     }
-
-    /**
-     * Driver specific start of real database transaction,
-     * this can not be used directly in code.
-     * @return void
-     */
-    protected function begin_transaction() {
-        $this->savepointpresent = true;
-        $sql = "BEGIN";
-        $this->query_start($sql, NULL, SQL_QUERY_AUX);
-        $result = pg_query($this->pgsql, $sql);
-        $this->query_end($result);
-    }
-
-    /**
-     * Driver specific commit of real database transaction,
-     * this can not be used directly in code.
-     * @return void
-     */
-    protected function commit_transaction() {
-        $this->savepointpresent = false;
-        $sql = "COMMIT";
-        $this->query_start($sql, NULL, SQL_QUERY_AUX);
-        $result = pg_query($this->pgsql, $sql);
-        $this->query_end($result);
-    }
-
-    /**
-     * Driver specific abort of real database transaction,
-     * this can not be used directly in code.
-     * @return void
-     */
-    protected function rollback_transaction() {
-        $this->savepointpresent = false;
-        $sql = "ROLLBACK";
-        $this->query_start($sql, NULL, SQL_QUERY_AUX);
-        $result = pg_query($this->pgsql, $sql);
-        $this->query_end($result);
-
-        return true;
-    }
     
     public function sql_concat() {
         $arr = func_get_args();
