@@ -49,7 +49,6 @@ class cockroachdb_native_moodle_database extends pgsql_native_moodle_database {
 
         if (is_array($sql)) {
             if (preg_match('/UPDATE TABLE (.*) ADD COLUMN (.*_temp[\d]+)/', $sql[0], $matches)){
-                error_log('split args');
                 $arg1 = $sql[0];
                 $arg2 = array_slice($sql, 1);
                 $arg2 = implode("\n;\n", $arg2) . ';';
@@ -112,6 +111,33 @@ class cockroachdb_native_moodle_database extends pgsql_native_moodle_database {
         $this->execute('SET experimental_serial_normalization TO sql_sequence');
 
         $this->temptables = new moodle_temptables($this);
+    }
+
+    /**
+     * Called immediately after each db query.
+     * @param mixed db specific result
+     * @return void
+     */
+    protected function query_end($result) {
+        // reset original debug level
+        error_reporting($this->last_error_reporting);
+        try {
+            moodle_database::query_end($result);
+            if ($this->savepointpresent and $this->last_type != SQL_QUERY_AUX and $this->last_type != SQL_QUERY_SELECT) {
+                $res = @pg_query($this->pgsql, "COMMIT; BEGIN");
+                if ($res) {
+                    pg_free_result($res);
+                }
+            }
+        } catch (Exception $e) {
+            if ($this->savepointpresent) {
+                $res = @pg_query($this->pgsql, "ROLLBACK; BEGIN");
+                if ($res) {
+                    pg_free_result($res);
+                }
+            }
+            throw $e;
+        }
     }
 
     # cockroachdb doesn't support locking
