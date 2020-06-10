@@ -107,41 +107,18 @@ class cockroachdb_native_moodle_database extends pgsql_native_moodle_database {
         // turn on expiremental cockroach savepoints
         $this->execute('SET force_savepoint_restart=true');
 
-        // set expiremental serial normalization
-        $this->execute('SET experimental_serial_normalization TO sql_sequence');
+        // enable expiremental temp tables for temp table support
+        $this->execute('SET experimental_enable_temp_tables To on');
+
+        // set expiremental serial normalization to enable sequences
+        $this->execute('SET experimental_serial_normalization To sql_sequence');
 
         $this->temptables = new moodle_temptables($this);
     }
 
-    /**
-     * Called immediately after each db query.
-     * @param mixed db specific result
-     * @return void
-     */
-    protected function query_end($result) {
-        // reset original debug level
-        error_reporting($this->last_error_reporting);
-        try {
-            moodle_database::query_end($result);
-            if ($this->savepointpresent and $this->last_type != SQL_QUERY_AUX and $this->last_type != SQL_QUERY_SELECT) {
-                $res = @pg_query($this->pgsql, "COMMIT; BEGIN");
-                if ($res) {
-                    pg_free_result($res);
-                }
-            }
-        } catch (Exception $e) {
-            if ($this->savepointpresent) {
-                $res = @pg_query($this->pgsql, "ROLLBACK; BEGIN");
-                if ($res) {
-                    pg_free_result($res);
-                }
-            }
-            throw $e;
-        }
-    }
-
-    # cockroachdb doesn't support locking
-    # so we won't waste time running pg_advisory_lock()
+    # cockroachdb doesn't support advisory locks
+    # by defualt this falls back to file locks
+    # the redis lock plugin is a great substitute
     # see: https://github.com/cockroachdb/cockroach/issues/13546
     #      https://github.com/cockroachdb/cockroach/issues/6583
     public function session_lock_supported() {
