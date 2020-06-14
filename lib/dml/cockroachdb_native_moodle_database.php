@@ -104,9 +104,6 @@ class cockroachdb_native_moodle_database extends pgsql_native_moodle_database {
 
         parent::connect($dbhost, $dbuser, $dbpass, $dbname, $prefix, $dboptions);
 
-        // turn on expiremental cockroach savepoints
-        $this->execute('SET force_savepoint_restart=true');
-
         // enable expiremental temp tables for temp table support
         $this->execute('SET experimental_enable_temp_tables To on');
 
