@@ -104,105 +104,22 @@ class cockroachdb_native_moodle_database extends pgsql_native_moodle_database {
 
         parent::connect($dbhost, $dbuser, $dbpass, $dbname, $prefix, $dboptions);
 
-        // turn on expiremental cockroach savepoints
-        $this->execute('SET force_savepoint_restart=true');
+        // enable expiremental temp tables for temp table support
+        $this->execute('SET experimental_enable_temp_tables To on');
 
-        // set expiremental serial normalization
-        $this->execute('SET experimental_serial_normalization TO sql_sequence');
+        // set expiremental serial normalization to enable sequences
+        $this->execute('SET experimental_serial_normalization To sql_sequence');
 
         $this->temptables = new moodle_temptables($this);
     }
 
-    /**
-     * Called immediately after each db query.
-     * @param mixed db specific result
-     * @return void
-     */
-    protected function query_end($result) {
-        // reset original debug level
-        error_reporting($this->last_error_reporting);
-        try {
-            moodle_database::query_end($result);
-            if ($this->savepointpresent and $this->last_type != SQL_QUERY_AUX and $this->last_type != SQL_QUERY_SELECT) {
-                $res = @pg_query($this->pgsql, "COMMIT; BEGIN");
-                if ($res) {
-                    pg_free_result($res);
-                }
-            }
-        } catch (Exception $e) {
-            if ($this->savepointpresent) {
-                $res = @pg_query($this->pgsql, "ROLLBACK; BEGIN");
-                if ($res) {
-                    pg_free_result($res);
-                }
-            }
-            throw $e;
-        }
-    }
-
-    # cockroachdb doesn't support locking
-    # so we won't waste time running pg_advisory_lock()
-    # see: https://github.com/cockroachdb/cockroach/issues/13546
-    #      https://github.com/cockroachdb/cockroach/issues/6583
+    // cockroachdb doesn't support advisory locks
+    // by defualt this falls back to file locks
+    // the redis lock plugin is a great substitute
+    // see: https://github.com/cockroachdb/cockroach/issues/13546
+    //      https://github.com/cockroachdb/cockroach/issues/6583
     public function session_lock_supported() {
-        return true;
-    }
-
-    /**
-     * Obtain session lock
-     * @param int $rowid id of the row with session record
-     * @param int $timeout max allowed time to wait for the lock in seconds
-     * @return bool success
-     */
-    public function get_session_lock($rowid, $timeout) {
-        return;
-
-    }
-
-    public function release_session_lock($rowid) {
-
-        return;
-    }
-
-    /**
-     * Driver specific start of real database transaction,
-     * this can not be used directly in code.
-     * @return void
-     */
-    protected function begin_transaction() {
-        $this->savepointpresent = true;
-        $sql = "BEGIN";
-        $this->query_start($sql, NULL, SQL_QUERY_AUX);
-        $result = pg_query($this->pgsql, $sql);
-        $this->query_end($result);
-    }
-
-    /**
-     * Driver specific commit of real database transaction,
-     * this can not be used directly in code.
-     * @return void
-     */
-    protected function commit_transaction() {
-        $this->savepointpresent = false;
-        $sql = "COMMIT";
-        $this->query_start($sql, NULL, SQL_QUERY_AUX);
-        $result = pg_query($this->pgsql, $sql);
-        $this->query_end($result);
-    }
-
-    /**
-     * Driver specific abort of real database transaction,
-     * this can not be used directly in code.
-     * @return void
-     */
-    protected function rollback_transaction() {
-        $this->savepointpresent = false;
-        $sql = "ROLLBACK";
-        $this->query_start($sql, NULL, SQL_QUERY_AUX);
-        $result = pg_query($this->pgsql, $sql);
-        $this->query_end($result);
-
-        return true;
+        return false;
     }
     
     public function sql_concat() {

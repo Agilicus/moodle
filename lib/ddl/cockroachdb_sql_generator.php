@@ -486,22 +486,6 @@ class cockroachdb_sql_generator extends postgres_sql_generator {
     }
 
     /**
-     * Cockroachdb doesn't support temptables yet
-     * https://github.com/cockroachdb/cockroach/issues/5807
-     *
-     * Create a regular table and rely on the base sql_generator to clean up.
-     *
-     * @param xmldb_table $xmldb_table The xmldb_table object instance.
-     * @return array of sql statements
-     */
-    public function getCreateTempTableSQL($xmldb_table) {
-        $this->temptables->add_temptable($xmldb_table->getName());
-        $sqlarr = $this->getCreateTableSQL($xmldb_table);
-        return $sqlarr;
-    }
-
-
-    /**
      * Given one correct xmldb_index, returns the SQL statements
      * needed to create it (in array).
      *
