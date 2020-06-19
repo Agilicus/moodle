@@ -50,7 +50,7 @@ class pgsql_native_recordset_testcase extends basic_testcase {
         parent::setUp();
 
         // Skip tests if not using Postgres.
-        if (!($DB instanceof pgsql_native_moodle_database)) {
+        if (!(get_class($DB) == 'pgsql_native_moodle_database')) {
             $this->markTestSkipped('Postgres-only test');
         }
     }
