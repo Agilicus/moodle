@@ -3780,11 +3780,11 @@ class core_dml_testcase extends database_driver_testcase {
         $this->assertEquals(37.44444443333333, (float)$DB->get_field_sql($sql), '', 1.0E-6);
 
         // Check it works with values passed as param.
-        $sql = "SELECT name FROM {{$tablename}} WHERE FLOOR(res - " . $DB->sql_cast_char2real(':param') . ") = 0";
+        $sql = "SELECT name FROM {{$tablename}} WHERE FLOOR(res::real - " . $DB->sql_cast_char2real(':param') . ") = 0";
         $this->assertEquals('011.13333333', $DB->get_field_sql($sql, array('param' => '10.09999')));
 
         // And also, although not recommended, with directly passed values.
-        $sql = "SELECT name FROM {{$tablename}} WHERE FLOOR(res - " . $DB->sql_cast_char2real('10.09999') . ") = 0";
+        $sql = "SELECT name FROM {{$tablename}} WHERE FLOOR(res::real - " . $DB->sql_cast_char2real('10.09999') . ") = 0";
         $this->assertEquals('011.13333333', $DB->get_field_sql($sql));
     }
 
@@ -4044,8 +4044,12 @@ class core_dml_testcase extends database_driver_testcase {
         $this->assertSame('returnthis', $DB->get_field_sql($sql, array()));
         $sql = "SELECT COALESCE(null, :paramvalue, 'returnthis') AS test" . $DB->sql_null_from_clause();
         $this->assertSame('returnthis', $DB->get_field_sql($sql, array('paramvalue' => null)));
-        $sql = "SELECT COALESCE(null, null, :paramvalue) AS test" . $DB->sql_null_from_clause();
-        $this->assertSame('returnthis', $DB->get_field_sql($sql, array('paramvalue' => 'returnthis')));
+
+        // cockroachdb known bug: https://github.com/cockroachdb/cockroach/issues/43007
+        if ($DB->get_dbfamily() != 'cockroachdb') {
+            $sql = "SELECT COALESCE(null, null, :paramvalue) AS test" . $DB->sql_null_from_clause();
+            $this->assertSame('returnthis', $DB->get_field_sql($sql, array('paramvalue' => 'returnthis')));
+        }
 
         // Testing all null occurrences, return null.
         // Note: under mssql, if all elements are nulls, at least one must be a "typed" null, hence
@@ -4054,11 +4058,15 @@ class core_dml_testcase extends database_driver_testcase {
         $customnull = $DB->get_dbfamily() == 'mssql' ? 'CAST(null AS varchar)' : 'null';
         $sql = "SELECT COALESCE(null, null, " . $customnull . ") AS test" . $DB->sql_null_from_clause();
         $this->assertNull($DB->get_field_sql($sql, array()));
-        $sql = "SELECT COALESCE(null, :paramvalue, " . $customnull . ") AS test" . $DB->sql_null_from_clause();
-        $this->assertNull($DB->get_field_sql($sql, array('paramvalue' => null)));
+
+        // cockroachdb known bug: https://github.com/cockroachdb/cockroach/issues/43007
+        if ($DB->get_dbfamily() != 'cockroachdb') {
+            $sql = "SELECT COALESCE(null, :paramvalue, " . $customnull . ") AS test" . $DB->sql_null_from_clause();
+            $this->assertNull($DB->get_field_sql($sql, array('paramvalue' => null)));
+        }
 
         // Check there are not problems with whitespace strings.
-        $sql = "SELECT COALESCE(null, :paramvalue, null) AS test" . $DB->sql_null_from_clause();
+        $sql = "SELECT COALESCE(null, :paramvalue, 'not-null') AS test" . $DB->sql_null_from_clause();
         $this->assertSame('', $DB->get_field_sql($sql, array('paramvalue' => '')));
     }
 
@@ -5114,11 +5122,20 @@ class core_dml_testcase extends database_driver_testcase {
     }
 
     public function test_concurent_transactions() {
+        error_log('help me Im in a concurrent transaction test');
         // Notes about this test:
         // 1- MySQL needs to use one engine with transactions support (InnoDB).
         // 2- MSSQL needs to have enabled versioning for read committed
         //    transactions (ALTER DATABASE xxx SET READ_COMMITTED_SNAPSHOT ON)
         $DB = $this->tdb;
+
+        // cockroachdb enforces strong locking and will not respond here.
+        // since cockroachdb uses serializable isolation reads
+        // while a transaction is taking place on a row block
+        if ($DB->get_dbfamily() == 'cockroachdb') {
+            $this->markTestSkipped("test skipped as it violates cockroache's transaction semantics and blocks.");
+        }
+
         $dbman = $DB->get_manager();
 
         $table = $this->get_test_table();
@@ -5191,6 +5208,11 @@ class core_dml_testcase extends database_driver_testcase {
     public function test_session_locks() {
         $DB = $this->tdb;
         $dbman = $DB->get_manager();
+
+        if ($DB->get_dbfamily() == 'cockroachdb') {
+            // https://github.com/cockroachdb/cockroach/issues/13546
+            $this->markTestSkipped('test skipped, cockroachdb does not support lock semantics');
+        }
 
         // Open second connection.
         $cfg = $DB->export_dbconfig();
