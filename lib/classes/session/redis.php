@@ -167,10 +167,10 @@ class redis extends handler {
                     '$CFG->session_redis_host must be specified in config.php');
         }
 
-        // The session handler requires a version of Redis with the SETEX command (at least 2.0).
+        // The session handler requires a version of Redis with support for SET command options (at least 2.6.12).
         $version = phpversion('Redis');
-        if (!$version or version_compare($version, '2.0') <= 0) {
-            throw new exception('sessionhandlerproblem', 'error', '', null, 'redis extension version must be at least 2.0');
+        if (!$version or version_compare($version, '2.6.12') <= 0) {
+            throw new exception('sessionhandlerproblem', 'error', '', null, 'redis extension version must be at least 2.6.12');
         }
 
         $this->connection = new \Redis();
@@ -463,11 +463,10 @@ class redis extends handler {
 
         while (!$haslock) {
 
-            $haslock = $this->connection->setnx($lockkey, $whoami);
+            $haslock = $this->connection->set($lockkey, $whoami, ['nx', 'ex' => $this->lockexpire]);
 
             if ($haslock) {
                 $this->locks[$id] = $this->time() + $this->lockexpire;
-                $this->connection->expire($lockkey, $this->lockexpire);
                 return true;
             }
 
